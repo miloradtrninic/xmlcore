@@ -12,13 +12,18 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.amss.beans.Message;
 import com.amss.beans.RegisteredUser;
+import com.amss.beans.Reservation;
+import com.amss.dto.MessageCreation;
 import com.amss.repository.MessageRepo;
 import com.amss.repository.RegisteredUserRepo;
+import com.amss.repository.ReservationRepo;
 
 @RestController
 @RequestMapping(value="message")
@@ -28,6 +33,9 @@ public class MessageController {
 	MessageRepo messageRepo;
 	@Autowired
 	RegisteredUserRepo registeredUserRepo;
+	
+	@Autowired
+	ReservationRepo reservationRepo;
 	
 	@GetMapping(produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> get(@PathVariable("reservationId") Long reservationId){
@@ -58,6 +66,32 @@ public class MessageController {
     		return new ResponseEntity<Message>(HttpStatus.BAD_REQUEST);
     	}
 		return new ResponseEntity<>(messageRepo.findByFromUserId(user.get().getId()), HttpStatus.OK);
+	}
+	
+	@PostMapping(value="/insert",
+			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
+			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<Message> insert(@RequestBody MessageCreation newEntity) {
+		Optional<Reservation> reservation = reservationRepo.findById(newEntity.getReservationId());
+		if(!reservation.isPresent()) {
+			return new ResponseEntity<Message>(HttpStatus.BAD_REQUEST);
+		}
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    	String username = authentication.getName();
+    	Optional<RegisteredUser> user = registeredUserRepo.findOneByUsername(username);
+    	if(!user.isPresent()) {
+    		return new ResponseEntity<Message>(HttpStatus.BAD_REQUEST);
+    	}
+    	Optional<RegisteredUser> toUser = registeredUserRepo.findById(newEntity.getToUserId());
+    	if(!toUser.isPresent()) {
+    		return new ResponseEntity<Message>(HttpStatus.BAD_REQUEST);
+    	}
+		Message message = new Message();
+		message.setContent(newEntity.getContent());
+		message.setFromUser(user.get());
+		message.setReservation(reservation.get());
+		message.setToUser(toUser.get());
+		return new ResponseEntity<Message>(messageRepo.save(message), HttpStatus.OK);
 	}
 	
 }
