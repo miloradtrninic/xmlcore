@@ -14,7 +14,7 @@ import lombok.Setter;
 public class AccommodationType {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Long id;
 	private String typeName;
 
 }
