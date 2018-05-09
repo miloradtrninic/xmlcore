@@ -43,7 +43,7 @@ public class Reservation {
 
 	private boolean confirmed;
 	
-	@OneToMany(orphanRemoval=true)
+	@OneToMany(orphanRemoval=true, mappedBy="reservation")
 	@Cascade(CascadeType.ALL)
 	private List<Message> messages;
 

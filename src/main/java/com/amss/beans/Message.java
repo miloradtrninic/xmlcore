@@ -28,5 +28,9 @@ public class Message {
 	
 	@ManyToOne(optional=false)
 	private User toUser;
+	
+	@ManyToOne(optional=false)
+	private Reservation reservation;
+	
 
 }
