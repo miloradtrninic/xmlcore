@@ -15,6 +15,8 @@ public class AccommodationType {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String typeName;
+	private String name;
+	
+	
 
 }
