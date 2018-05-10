@@ -21,7 +21,6 @@ import com.amss.dto.UserImpressionCreation;
 import com.amss.repository.AccomodationRepo;
 import com.amss.repository.RegisteredUserRepo;
 import com.amss.repository.UserImpressionRepo;
-
 @RestController
 @RequestMapping(value="/userimpression")
 public class UserImpressionController {
