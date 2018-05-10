@@ -7,6 +7,7 @@ package com.amss.beans;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -45,6 +46,6 @@ public class Reservation {
 	
 	@OneToMany(orphanRemoval=true, mappedBy="reservation")
 	@Cascade(CascadeType.ALL)
-	private List<Message> messages;
+	private Set<Message> messages;
 
 }

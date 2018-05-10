@@ -1,8 +1,7 @@
 package com.amss.beans;
 
-import java.util.List;
+import java.util.Set;
 
-import javax.annotation.Generated;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -11,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -38,22 +36,22 @@ public class Accommodation {
 	private String name;
 	@OneToMany(orphanRemoval=true, fetch=FetchType.EAGER)
 	@Cascade(CascadeType.ALL)
-	private List<Document> images;
+	private Set<Document> images;
 
 	private Integer capacity;
 	@ManyToMany(fetch=FetchType.EAGER)
-	private List<AdditionalService> additionalServices;
+	private Set<AdditionalService> additionalServices;
 
 	@OneToMany(orphanRemoval=true, fetch=FetchType.EAGER)
 	@Cascade(CascadeType.ALL)
-	private List<PricePlan> pricePlan;
+	private Set<PricePlan> pricePlan;
 
 	@ManyToOne(optional=false, fetch=FetchType.LAZY)
 	private Agent agent;
 
 	@OneToMany(orphanRemoval=true, fetch=FetchType.EAGER)
 	@Cascade(CascadeType.ALL)
-	private List<Restriction> restrictions;
+	private Set<Restriction> restrictions;
 
 	@ManyToOne(fetch=FetchType.EAGER)
 	private Category category;

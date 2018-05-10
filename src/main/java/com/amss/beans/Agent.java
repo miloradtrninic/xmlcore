@@ -1,6 +1,6 @@
 package com.amss.beans;
 
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -19,7 +19,7 @@ import lombok.Setter;
 public class Agent extends User {
    @OneToMany(mappedBy="agent", orphanRemoval=true)
    @Cascade(CascadeType.ALL)
-   private List<Accommodation> accommodations;
+   private Set<Accommodation> accommodations;
    
    private Boolean verified;
    

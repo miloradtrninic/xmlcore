@@ -6,6 +6,7 @@ package com.amss.beans;
  ***********************************************************************/
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -24,11 +25,11 @@ import lombok.Setter;
 public class RegisteredUser extends User {
 	@OneToMany(orphanRemoval=true, mappedBy="registeredUser")
 	@Cascade(CascadeType.ALL)
-	private List<Reservation> reservations;
+	private Set<Reservation> reservations;
 	
 	@OneToMany(orphanRemoval=true, mappedBy="registeredUser")
 	@Cascade(CascadeType.ALL)
-	private List<UserImpression> userImpression;
+	private Set<UserImpression> userImpression;
 	
 	private Boolean blocked;
 
