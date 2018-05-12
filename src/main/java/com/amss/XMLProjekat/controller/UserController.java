@@ -23,6 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.amss.XMLProjekat.beans.Agent;
 import com.amss.XMLProjekat.beans.User;
 import com.amss.XMLProjekat.dto.AgentCreation;
+import com.amss.XMLProjekat.dto.AgentView;
+import com.amss.XMLProjekat.dto.UserCreation;
+import com.amss.XMLProjekat.dto.UserView;
 import com.amss.XMLProjekat.repository.AgentRepo;
 import com.amss.XMLProjekat.repository.UserRepo;
 
@@ -33,43 +36,42 @@ public class UserController {
 	UserRepo repo;
 	@Autowired
 	AgentRepo agentRepo;
-	
 	@Autowired
 	ModelMapper mapper;
 	
 	@RequestMapping(value="/all", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public Page<User> getAll(@NotNull final Pageable p) {
-		return repo.findAll(p);
+	public Page<UserView> getAll(@NotNull final Pageable p) {
+		return repo.findAll(p).map(u -> mapper.map(u, UserView.class));
 	}
 	
 	@PutMapping(value="/update",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<User> update(@RequestBody User newEntity) {
+	public ResponseEntity<?> update(@RequestBody User newEntity) {
 		if(repo.existsById(newEntity.getId())) {
-			return new ResponseEntity<User>(repo.save(newEntity), HttpStatus.OK);
+			return new ResponseEntity<UserView>(mapper.map(repo.save(newEntity), UserView.class), HttpStatus.OK);
 		}
-		return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<UserView>(HttpStatus.BAD_REQUEST);
 	}
 	@PostMapping(value="/insert",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<Agent> insert(@RequestBody AgentCreation newEntity) {
+	public ResponseEntity<AgentView> insert(@RequestBody UserCreation newEntity) {
 		Agent newAgent = mapper.map(newEntity, Agent.class);
 		newAgent.setRegistrationDate(new Date());
-		return new ResponseEntity<Agent>(agentRepo.save(newAgent), HttpStatus.OK);
+		return new ResponseEntity<AgentView>(mapper.map(agentRepo.save(newAgent), AgentView.class), HttpStatus.OK);
 	}
 	
 	@DeleteMapping(value="/delete",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<User> delete(@PathVariable("id") Long id) {
+	public ResponseEntity<?> delete(@PathVariable("id") Long id) {
 		Optional<User> entity = repo.findById(id);
 		if(entity.isPresent()) {
 			repo.delete(entity.get());
-			return new ResponseEntity<User>(entity.get(), HttpStatus.OK);
+			return new ResponseEntity<UserView>(mapper.map(entity.get(), UserView.class), HttpStatus.OK);
 		}
-		return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<UserView>(HttpStatus.BAD_REQUEST);
 	}
 	
 }

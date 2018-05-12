@@ -2,6 +2,7 @@ package com.amss.XMLProjekat.controller;
 
 import javax.validation.constraints.NotNull;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +27,8 @@ public class CategoryController {
 
 	@Autowired
 	CategoryRepo categoryRepo;
+	@Autowired
+	ModelMapper mapper;
 	
 	@RequestMapping(value="/all", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public Page<Category> getAll(@NotNull final Pageable p) {
@@ -35,12 +38,12 @@ public class CategoryController {
 	@PutMapping(value="/update",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<Category> update(@RequestBody Category newCat) {
+	public ResponseEntity<?> update(@RequestBody Category newCat) {
 		if(categoryRepo.existsById(newCat.getId())) {
 			Category updated = categoryRepo.save(newCat);
-			return new ResponseEntity<Category>(updated, HttpStatus.OK);
+			return new ResponseEntity<>(updated, HttpStatus.OK);
 		}
-		return new ResponseEntity<Category>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 	
 	@PostMapping(value="/insert",

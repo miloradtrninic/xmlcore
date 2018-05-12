@@ -2,6 +2,7 @@ package com.amss.XMLProjekat.controller;
 
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,6 +19,7 @@ import com.amss.XMLProjekat.beans.Accommodation;
 import com.amss.XMLProjekat.beans.RegisteredUser;
 import com.amss.XMLProjekat.beans.UserImpression;
 import com.amss.XMLProjekat.dto.UserImpressionCreation;
+import com.amss.XMLProjekat.dto.UserImpressionView;
 import com.amss.XMLProjekat.repository.AccomodationRepo;
 import com.amss.XMLProjekat.repository.RegisteredUserRepo;
 import com.amss.XMLProjekat.repository.UserImpressionRepo;
@@ -31,23 +33,23 @@ public class UserImpressionController {
 	AccomodationRepo accomodationRepo;
 	@Autowired
 	RegisteredUserRepo registeredUserRepo;
-	
-	// TODO PREGLED OCENA PO APARTMANU
+	@Autowired
+	ModelMapper mapper;
 	
 	@PutMapping(value="/update",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<UserImpression> update(@RequestBody UserImpression newEntity) {
+	public ResponseEntity<?> update(@RequestBody UserImpression newEntity) {
 		if(repo.existsById(newEntity.getId())) {
-			return new ResponseEntity<UserImpression>(repo.save(newEntity), HttpStatus.OK);
+			return new ResponseEntity<UserImpressionView>(mapper.map(repo.save(newEntity), UserImpressionView.class), HttpStatus.OK);
 		}
-		return new ResponseEntity<UserImpression>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<UserImpressionView>(HttpStatus.BAD_REQUEST);
 	}
 	
 	@PostMapping(value="/insert",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<UserImpression> insert(@RequestBody UserImpressionCreation newEntity) {
+	public ResponseEntity<?> insert(@RequestBody UserImpressionCreation newEntity) {
 		Optional<Accommodation> accommodation = accomodationRepo.findById(newEntity.getAccommodationId());
 		if(!accommodation.isPresent()) {
 			return new ResponseEntity<UserImpression>(HttpStatus.BAD_REQUEST);
@@ -64,7 +66,7 @@ public class UserImpressionController {
 		userImpression.setVerified(false);
 		userImpression.setRegisteredUser(user.get());
 		userImpression.setAccommodation(accommodation.get());
-		return new ResponseEntity<UserImpression>(repo.save(userImpression), HttpStatus.OK);
+		return new ResponseEntity<UserImpressionView>(mapper.map(repo.save(userImpression), UserImpressionView.class), HttpStatus.OK);
 	}
 	
 }

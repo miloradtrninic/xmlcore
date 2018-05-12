@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import javax.validation.constraints.NotNull;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,7 @@ import com.amss.XMLProjekat.beans.Accommodation;
 import com.amss.XMLProjekat.beans.RegisteredUser;
 import com.amss.XMLProjekat.beans.Reservation;
 import com.amss.XMLProjekat.dto.ReservationCreation;
+import com.amss.XMLProjekat.dto.ReservationView;
 import com.amss.XMLProjekat.repository.AccomodationRepo;
 import com.amss.XMLProjekat.repository.RegisteredUserRepo;
 import com.amss.XMLProjekat.repository.ReservationRepo;
@@ -35,10 +37,10 @@ public class ReservationController {
 	
 	@Autowired
 	RegisteredUserRepo registeredUserRepo;
-	
 	@Autowired
 	AccomodationRepo accomodationRepo;
-	
+	@Autowired
+	ModelMapper mapper;
 	
 	@GetMapping(value="myreservations", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> getMy(@NotNull Pageable p) {
@@ -46,9 +48,9 @@ public class ReservationController {
     	String username = authentication.getName();
     	Optional<RegisteredUser> user = registeredUserRepo.findOneByUsername(username);
     	if(!user.isPresent()) {
-    		return new ResponseEntity<Reservation>(HttpStatus.BAD_REQUEST);
+    		return new ResponseEntity<ReservationView>(HttpStatus.BAD_REQUEST);
     	}
-    	return new ResponseEntity<Page<Reservation>>(reservationRepo.findByRegisteredUserId(user.get().getId(), p), HttpStatus.OK);
+    	return new ResponseEntity<Page<ReservationView>>(reservationRepo.findByRegisteredUserId(user.get().getId(), p).map(r -> mapper.map(r, ReservationView.class)), HttpStatus.OK);
 	}
 	
 	@PostMapping(value="reserve", consumes=MediaType.APPLICATION_JSON_UTF8_VALUE, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -61,7 +63,7 @@ public class ReservationController {
     	}
     	Optional<Accommodation> accommodation = accomodationRepo.findById(reserve.getAccommodationId());
     	if(!accommodation.isPresent()) {
-    		return new ResponseEntity<Reservation>(HttpStatus.BAD_REQUEST);
+    		return new ResponseEntity<ReservationView>(HttpStatus.BAD_REQUEST);
     	}
     	Reservation reservation = new Reservation();
     	reservation.setConfirmed(false);
@@ -69,24 +71,24 @@ public class ReservationController {
     	reservation.setStartingDate(reservation.getStartingDate());
     	reservation.setRegisteredUser(user.get());
     	reservation.setAccommodation(accommodation.get());
-    	return new ResponseEntity<Reservation>(reservationRepo.save(reservation), HttpStatus.OK);
+    	return new ResponseEntity<ReservationView>(mapper.map(reservationRepo.save(reservation), ReservationView.class), HttpStatus.OK);
 	}
 	
 	@DeleteMapping(value="/cancel",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<Reservation> delete(@PathVariable("id") Long id) {
+	public ResponseEntity<?> delete(@PathVariable("id") Long id) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     	String username = authentication.getName();
     	Optional<RegisteredUser> user = registeredUserRepo.findOneByUsername(username);
     	if(!user.isPresent()) {
-    		return new ResponseEntity<Reservation>(HttpStatus.BAD_REQUEST);
+    		return new ResponseEntity<ReservationView>(HttpStatus.BAD_REQUEST);
     	}
 		Optional<Reservation> entity = reservationRepo.findOneByIdAndRegisteredUserId(id, user.get().getId());
 		if(entity.isPresent()) {
 			reservationRepo.delete(entity.get());
-			return new ResponseEntity<Reservation>(entity.get(), HttpStatus.OK);
+			return new ResponseEntity<ReservationView>(mapper.map(entity.get(), ReservationView.class), HttpStatus.OK);
 		}
-		return new ResponseEntity<Reservation>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<ReservationView>(HttpStatus.BAD_REQUEST);
 	}
 }
