@@ -49,7 +49,7 @@ public class Accommodation {
 	@ManyToOne(optional=false, fetch=FetchType.LAZY)
 	private Agent agent;
 
-	@OneToMany(orphanRemoval=true, fetch=FetchType.EAGER)
+	@OneToMany(orphanRemoval=true, mappedBy="accommodation", fetch=FetchType.EAGER)
 	@Cascade(CascadeType.ALL)
 	private Set<Restriction> restrictions;
 

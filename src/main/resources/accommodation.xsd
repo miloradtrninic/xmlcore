@@ -1,0 +1,189 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="http://amss.com/XMLProjekat/dto/soap" targetNamespace="http://amss.com/XMLProjekat/dto/soap"
+	elementFormDefault="qualified">
+	<!-- REQUESTS -->
+	<xs:element name="getReservationsRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="accomodationId" type="xs:long" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="getMessagesRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="reservationId" type="xs:long" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="getInboxRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="agentId" type="xs:long" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="getSentboxRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="agentId" type="xs:long" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="sendMessageRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="reservationId" type="xs:long" />
+				<xs:element name="agentId" type="xs:long" />
+				<xs:element name="receiverId" type="xs:long" />
+				<xs:element name="content" type="xs:string" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="acceptReservationRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="reservationId" type="xs:long" />
+				<xs:element name="confirmed" type="xs:boolean" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="restrictionRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="accommodationId" type="xs:long" />
+				<xs:element name="restrictionFrom" type="xs:date" />
+				<xs:element name="restrictionTo" type="xs:date" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="createAccommodationRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="location" type="xs:string" />
+				<xs:element name="description" type="xs:string" />
+				<xs:element name="name" type="xs:string" />
+				<xs:element name="capacity" type="xs:int" />
+				<xs:element name="agentId" type="xs:long" />
+				<xs:element name="type" type="xs:long" />
+				<xs:element name="category" type="xs:long" />
+				<xs:element name="additionalServices" type="xs:long"
+					maxOccurs="unbounded" />
+				<xs:element name="pricePlans" type="tns:pricePlanView"
+					maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- RESPONSES -->
+	<xs:element name="getReservationsResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="reservations" type="tns:reservationView"
+					maxOccurs="unbounded" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="getMessagesResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="messages" type="tns:messageView"
+					minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="getInboxResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="messages" type="tns:messageView"
+					minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="getSentboxResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="messages" type="tns:messageView"
+					minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+		<xs:element name="sendMessageResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="message" type="tns:messageView" />
+				<xs:element name="success" type="xs:boolean" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="restrictionResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="accomodation" type="tns:accommodationView" nillable="true"></xs:element>
+				<xs:element name="success" type="xs:boolean"></xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="acceptReservationResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="reservations" type="tns:reservationView"
+					nillable="true"></xs:element>
+				<xs:element name="success" type="xs:boolean"></xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="createAccommodationResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="accomodation" type="tns:accommodationView"
+					nillable="true"></xs:element>
+				<xs:element name="success" type="xs:boolean"></xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- MODELS -->
+	<xs:complexType name="reservationView">
+		<xs:sequence>
+			<xs:element name="id" type="xs:long" />
+			<xs:element name="accommodatioName" type="xs:string" />
+			<xs:element name="registeredUserUsername" type="xs:string" />
+			<xs:element name="startingDate" type="xs:date" />
+			<xs:element name="endingDate" type="xs:date" />
+			<xs:element name="confirmed" type="xs:boolean" />
+			<xs:element name="messages" type="xs:boolean" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="messageView">
+		<xs:sequence>
+			<xs:element name="id" type="xs:long" />
+			<xs:element name="content" type="xs:string" />
+			<xs:element name="fromUserUsername" type="xs:string" />
+			<xs:element name="toUserUsername" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="pricePlanView">
+		<xs:sequence>
+			<xs:element name="id" type="xs:long" />
+			<xs:element name="startingDate" type="xs:date" />
+			<xs:element name="endingDate" type="xs:date" />
+			<xs:element name="price" type="xs:double" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="accommodationView">
+		<xs:sequence>
+			<xs:element name="id" type="xs:long" />
+			<xs:element name="location" type="xs:string" />
+			<xs:element name="description" type="xs:string" />
+			<xs:element name="name" type="xs:string" />
+			<xs:element name="capacity" type="xs:int" />
+			<xs:element name="agentId" type="xs:long" />
+			<xs:element name="type" type="xs:long" />
+			<xs:element name="categoryName" type="xs:long" />
+			<xs:element name="additionalServicesName" type="xs:string"
+				maxOccurs="unbounded" />
+			<xs:element name="pricePlans" type="tns:pricePlanView"
+				maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

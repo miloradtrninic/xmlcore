@@ -1,9 +1,7 @@
 package com.amss.XMLProjekat.controller;
 
-import java.util.List;
 import java.util.regex.Pattern;
 
-import org.hibernate.sql.ordering.antlr.OrderingSpecification;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,7 +19,6 @@ import com.amss.XMLProjekat.dto.AccommodationView;
 import com.amss.XMLProjekat.repository.AccomodationRepo;
 import com.amss.XMLProjekat.repository.dsl.PredicateBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.sun.istack.internal.NotNull;
 
 @RestController
 @RequestMapping("/accommodation")
@@ -35,7 +32,7 @@ public class AccomodationController {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "all")
 	@ResponseBody
-	public ResponseEntity<?> search(@RequestParam(value = "search") String search, @NotNull Pageable page) {
+	public ResponseEntity<?> search(@RequestParam(value = "search") String search, @javax.validation.constraints.NotNull Pageable page) {
 		PredicateBuilder<Accommodation> builder = new PredicateBuilder<>(Accommodation.class, "accommodation");
 		if (search != null) {
             Pattern pattern = Pattern.compile("(\b+?)(:|<|>)(\b+?),");
