@@ -19,7 +19,7 @@ public class WebServiceConfig extends WsConfigurerAdapter {
 	public DefaultWsdl11Definition defaultWsdl11Definition(XsdSchema accomodationSchema) {
 	  DefaultWsdl11Definition definition = new DefaultWsdl11Definition();
 	  definition.setPortTypeName("AccommodationPort");
-	  definition.setTargetNamespace("http://xmlcore.com/accommodations");
+	  definition.setTargetNamespace("http://amss.com/XMLProjekat/dto/soap");
 	  definition.setLocationUri("/ws");
 	  definition.setSchema(accomodationSchema);
 	  return definition;

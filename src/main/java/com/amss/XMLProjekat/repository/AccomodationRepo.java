@@ -17,5 +17,6 @@ public interface AccomodationRepo extends PagingAndSortingRepository<Accommodati
 	@Override
     default public void customize(QuerydslBindings bindings, QAccommodation root) {
         bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
+        bindings.bind(root.additionalServices.any().serviceName).as("service").first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);;
     }
 }

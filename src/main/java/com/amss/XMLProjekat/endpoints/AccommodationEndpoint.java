@@ -28,6 +28,8 @@ import com.amss.XMLProjekat.repository.UserRepo;
 
 @Endpoint
 public class AccommodationEndpoint {
+	private static final String NAMESPACE = "http://amss.com/XMLProjekat/dto/soap";
+	
 	@Autowired
 	AccomodationRepo accomodationRepo;
 	
@@ -49,7 +51,7 @@ public class AccommodationEndpoint {
 	@Autowired
 	MessageRepo messageRepo;
 	
-	@PayloadRoot(namespace = "http://xmlcore.com/accommodations", localPart = "createAccommodationRequest")
+	@PayloadRoot(namespace = NAMESPACE, localPart = "createAccommodationRequest")
 	@ResponsePayload
 	public CreateAccommodationResponse createAccommodation(@RequestPayload CreateAccommodationRequest create) {
 		CreateAccommodationResponse response = new CreateAccommodationResponse();
@@ -64,7 +66,7 @@ public class AccommodationEndpoint {
 		}
 		return response;
 	}
-	@PayloadRoot(namespace = "http://xmlcore.com/accommodations", localPart = "restrictionRequest")
+	@PayloadRoot(namespace = NAMESPACE, localPart = "restrictionRequest")
 	@ResponsePayload
 	public RestrictionResponse restrict(@RequestPayload RestrictionRequest request) {
 		RestrictionResponse response = new RestrictionResponse();
@@ -82,7 +84,7 @@ public class AccommodationEndpoint {
 		}
 		return response;
 	}
-	@PayloadRoot(namespace = "http://xmlcore.com/accommodations", localPart = "acceptReservationRequest")
+	@PayloadRoot(namespace = NAMESPACE, localPart = "acceptReservationRequest")
 	@ResponsePayload
 	public AcceptReservationResponse acceptReservation(@RequestPayload AcceptReservationRequest request) {
 		AcceptReservationResponse response = new AcceptReservationResponse();
@@ -96,7 +98,7 @@ public class AccommodationEndpoint {
 		}
 		return response;
 	}
-	@PayloadRoot(namespace = "http://xmlcore.com/accommodations", localPart = "getReservationsRequest")
+	@PayloadRoot(namespace = NAMESPACE, localPart = "getReservationsRequest")
 	@ResponsePayload
 	public GetReservationsResponse getReservations(@RequestPayload GetReservationsRequest request) {
 		GetReservationsResponse response = new GetReservationsResponse();
@@ -107,7 +109,7 @@ public class AccommodationEndpoint {
 		return response;
 	}
 	
-	@PayloadRoot(namespace = "http://xmlcore.com/accommodations", localPart = "getInboxRequest")
+	@PayloadRoot(namespace = NAMESPACE, localPart = "getInboxRequest")
 	@ResponsePayload
 	public  GetInboxResponse getInbox(@RequestPayload GetInboxRequest request) {
 		GetInboxResponse response = new GetInboxResponse();
@@ -116,7 +118,7 @@ public class AccommodationEndpoint {
 		response.getMessages().addAll(messages);
 		return response;
 	}
-	@PayloadRoot(namespace = "http://xmlcore.com/accommodations", localPart = "getSentboxRequest")
+	@PayloadRoot(namespace = NAMESPACE, localPart = "getSentboxRequest")
 	@ResponsePayload
 	public GetSentboxResponse getSentbox(@RequestPayload GetSentboxRequest request) {
 		GetSentboxResponse response = new GetSentboxResponse();
@@ -126,7 +128,7 @@ public class AccommodationEndpoint {
 		return response;
 	}
 	
-	@PayloadRoot(namespace = "http://xmlcore.com/accommodations", localPart = "getMessagesRequest")
+	@PayloadRoot(namespace = NAMESPACE, localPart = "getMessagesRequest")
 	@ResponsePayload
 	public GetMessagesResponse getMessagesByReservation(@RequestPayload GetMessagesRequest request) {
 		GetMessagesResponse response = new GetMessagesResponse();
@@ -136,7 +138,7 @@ public class AccommodationEndpoint {
 		return response;
 	}
 	
-	@PayloadRoot(namespace = "http://xmlcore.com/accommodations", localPart = "sendMessageRequest")
+	@PayloadRoot(namespace = NAMESPACE, localPart = "sendMessageRequest")
 	@ResponsePayload
 	public SendMessageResponse getMessagesByReservation(@RequestPayload SendMessageRequest request) {
 		SendMessageResponse response = new SendMessageResponse();
