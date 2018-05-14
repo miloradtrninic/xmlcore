@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter @Setter @NoArgsConstructor
-@XmlRootElement
 public class AccommodationView {
 	private Long id;
 	private String location;

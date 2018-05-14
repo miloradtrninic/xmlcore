@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import javax.validation.constraints.NotNull;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +12,7 @@ import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.amss.XMLProjekat.beans.AccommodationType;
+import com.amss.XMLProjekat.dto.AccommodationTypeView;
 import com.amss.XMLProjekat.repository.AccommodationTypeRepo;
 
 @RestController
@@ -30,9 +33,12 @@ public class AccomodationTypeController {
 	@Autowired
 	AccommodationTypeRepo accommodationTypeRepo;
 	
+	@Autowired
+	ModelMapper mapper;
+	
 	@GetMapping(value="/all", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public Page<AccommodationType> getAll(@NotNull final Pageable p) {
-		return accommodationTypeRepo.findAll(p);
+	public Page<AccommodationTypeView> getAll(@NotNull final Pageable p) {
+		return accommodationTypeRepo.findAll(p).map(a -> mapper.map(a, AccommodationTypeView.class));
 	}
 	
 	@PutMapping(value="/update",
