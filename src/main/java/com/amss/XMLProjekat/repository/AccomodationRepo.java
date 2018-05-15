@@ -20,7 +20,7 @@ import com.querydsl.core.types.dsl.StringPath;
 public interface AccomodationRepo extends PagingAndSortingRepository<Accommodation, Long>, QuerydslPredicateExecutor<Accommodation>, QuerydslBinderCustomizer<QAccommodation> {
 	@Override
     default public void customize(QuerydslBindings bindings, QAccommodation root) {
-        bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
+       // bindings.bind(String.class).first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
         //bindings.bind(root.additionalServices.any().serviceName).as("service").first((SingleValueBinding<StringPath, String>) StringExpression::containsIgnoreCase);
         bindings.bind(root.additionalServices.any().serviceName).as("service").all((StringPath path, Collection<? extends String> values) -> {
         	BooleanBuilder predicate = new BooleanBuilder();

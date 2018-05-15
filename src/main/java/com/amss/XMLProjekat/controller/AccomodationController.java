@@ -43,7 +43,7 @@ public class AccomodationController {
 		PredicateBuilder<Accommodation> builder = new PredicateBuilder<>(Accommodation.class, "accommodation");
 		if (search != null) {
 			logger.info(search);
-            Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)([a-zA-Z ]+?),");
+            Pattern pattern = Pattern.compile("([a-zA-Z\\.]+?)(:|<|>)([a-zA-Z1-9 ]+?),");
             java.util.regex.Matcher matcher = pattern.matcher(search + ",");
             while (matcher.find()) {
             	logger.info("foudn pattern");
@@ -61,7 +61,7 @@ public class AccomodationController {
 	public ResponseEntity<?> getOne(@RequestParam(value="id", required=true) Long id) {
 		Optional<Accommodation> accomodation = repo.findById(id);
 		if(accomodation.isPresent()) {
-			return new ResponseEntity<>(accomodation.get(), HttpStatus.OK);
+			return new ResponseEntity<>(mapper.map(accomodation.get(), AccommodationView.class), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}

@@ -10,9 +10,11 @@ import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.core.types.dsl.StringPath;
 
+import lombok.extern.log4j.Log4j2;
 
 
 
+@Log4j2
 public class CustomPredicate<T> {
 	private SearchCriteria criteria;
 	private Class<T> clazz;
@@ -50,6 +52,7 @@ public class CustomPredicate<T> {
 			}
 		}
 		else {
+			log.info(criteria.getKey() + " criteria key");
 			StringPath path = entityPath.getString(criteria.getKey());
 			if (criteria.getOperation().equalsIgnoreCase(":")) {
 				return path.containsIgnoreCase(criteria.getValue().toString());
