@@ -3,11 +3,14 @@ package com.amss.XMLProjekat.repository.dsl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.util.ClassTypeInformation;
+
+import com.amss.XMLProjekat.beans.Accommodation;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 
 
-
+// TODO implementirani genericki preko TypeInformation https://www.programcreek.com/java-api-examples/index.php?api=org.springframework.data.querydsl.binding.QuerydslPredicate
 
 public class PredicateBuilder<T> {
 	private List<SearchCriteria> params;
@@ -30,7 +33,6 @@ public class PredicateBuilder<T> {
         if (params.size() == 0) {
             return null;
         }
- 
         List<BooleanExpression> predicates = new ArrayList<>();
         for (SearchCriteria param : params) {
             BooleanExpression exp = new CustomPredicate<T>(param,clazz,variable).getPredicate();

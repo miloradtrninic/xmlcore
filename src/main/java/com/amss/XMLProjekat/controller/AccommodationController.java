@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +24,12 @@ import com.amss.XMLProjekat.beans.Accommodation;
 import com.amss.XMLProjekat.dto.AccommodationView;
 import com.amss.XMLProjekat.repository.AccomodationRepo;
 import com.amss.XMLProjekat.repository.dsl.PredicateBuilder;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 @RestController
 @RequestMapping("/accommodation")
-public class AccomodationController {
+public class AccommodationController {
 
 	@Autowired
 	ModelMapper mapper;
@@ -37,7 +39,7 @@ public class AccomodationController {
 	
 	protected final Log logger = LogFactory.getLog(getClass());
 	
-	@RequestMapping(method = RequestMethod.GET, value = "all")
+	/*@RequestMapping(method = RequestMethod.GET, value = "all")
 	@ResponseBody
 	public ResponseEntity<?> search(@RequestParam(value = "search", required=false) String search, @javax.validation.constraints.NotNull Pageable page) {
 		PredicateBuilder<Accommodation> builder = new PredicateBuilder<>(Accommodation.class, "accommodation");
@@ -55,7 +57,13 @@ public class AccomodationController {
         }
         BooleanExpression exp = builder.build();
         return new ResponseEntity<Page<AccommodationView>>(repo.findAll(exp, page).map(a -> mapper.map(a, AccommodationView.class)), HttpStatus.OK);
+	}*/
+	@RequestMapping(method = RequestMethod.GET, value = "all")
+	@ResponseBody
+	public ResponseEntity<?> searchDSL(@QuerydslPredicate(root=Accommodation.class) Predicate predicate , @javax.validation.constraints.NotNull Pageable page) {
+        return new ResponseEntity<Page<AccommodationView>>(repo.findAll(predicate, page).map(a -> mapper.map(a, AccommodationView.class)), HttpStatus.OK);
 	}
+	
 	
 	@GetMapping(produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> getOne(@RequestParam(value="id", required=true) Long id) {

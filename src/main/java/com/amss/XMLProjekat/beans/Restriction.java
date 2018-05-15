@@ -15,6 +15,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,8 +31,11 @@ public class Restriction {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@DateTimeFormat(pattern="dd-MM-yyyy")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date restrictionFrom;
+	@DateTimeFormat(pattern="dd-MM-yyyy")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date restrictionTo;
 	@ManyToOne(optional=false)
