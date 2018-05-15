@@ -21,6 +21,22 @@ public class XmlProjekatApplication {
 		SpringApplication.run(XmlProjekatApplication.class, args);
 	}
 	
+	@Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                .allowedOrigins("*")
+                .allowedMethods("*")
+                .allowedHeaders("*")
+                .exposedHeaders("Content-Type", "Date", "Total-Count", "Authorization")
+                .maxAge(3600);
+            }
+        };
+    }
+	
+	
 	
 	@Bean
 	public ModelMapper getModelMapper() {
