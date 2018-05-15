@@ -15,9 +15,9 @@ public class AccommodationView {
 	private String typeName;
 	private String description;
 	private String name;
-	private List<String> imagesPath;
+	private List<DocumentView> images;
 	private Integer capacity;
-	private List<String> additionalServicesName;
+	private List<AdditionalServiceView> additionalServices;
 	private List<PricePlanView> pricePlan;
 	private String agentUsername;
 	private List<RestrictionView> restrictions;

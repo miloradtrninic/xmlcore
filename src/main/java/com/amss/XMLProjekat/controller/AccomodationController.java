@@ -1,5 +1,6 @@
 package com.amss.XMLProjekat.controller;
 
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
@@ -9,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,7 +42,8 @@ public class AccomodationController {
 	public ResponseEntity<?> search(@RequestParam(value = "search", required=false) String search, @javax.validation.constraints.NotNull Pageable page) {
 		PredicateBuilder<Accommodation> builder = new PredicateBuilder<>(Accommodation.class, "accommodation");
 		if (search != null) {
-            Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
+			logger.info(search);
+            Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)([a-zA-Z ]+?),");
             java.util.regex.Matcher matcher = pattern.matcher(search + ",");
             while (matcher.find()) {
             	logger.info("foudn pattern");
@@ -51,5 +55,15 @@ public class AccomodationController {
         }
         BooleanExpression exp = builder.build();
         return new ResponseEntity<Page<AccommodationView>>(repo.findAll(exp, page).map(a -> mapper.map(a, AccommodationView.class)), HttpStatus.OK);
+	}
+	
+	@GetMapping(produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<?> getOne(@RequestParam(value="id", required=true) Long id) {
+		Optional<Accommodation> accomodation = repo.findById(id);
+		if(accomodation.isPresent()) {
+			return new ResponseEntity<>(accomodation.get(), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 	}
 }
