@@ -39,5 +39,7 @@ public abstract class User {
 	private String password;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date registrationDate;
+	private Boolean blocked;
+	private String user_type;
 
 }
