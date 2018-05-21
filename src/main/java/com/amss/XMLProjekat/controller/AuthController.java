@@ -1,0 +1,115 @@
+package com.amss.XMLProjekat.controller;
+
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.Set;
+
+import org.hibernate.HibernateException;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.WebRequest;
+
+import com.amss.XMLProjekat.beans.User;
+import com.amss.XMLProjekat.repository.UserRepo;
+import com.amss.XMLProjekat.security.JwtAuthenticationRequest;
+import com.amss.XMLProjekat.security.JwtAuthenticationResponse;
+import com.amss.XMLProjekat.security.JwtTokenUtil;
+import com.amss.XMLProjekat.security.UserDetailsCustom;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+
+@RestController
+@RequestMapping(value="/auth")
+public class AuthController {
+
+	@Autowired
+	private UserRepo userRepo;
+
+
+	@Autowired
+	private AuthenticationManager authenticationManager;
+
+	@Autowired
+	private UserDetailsService myAppUserDetailsService;
+
+	@Autowired
+	private JwtTokenUtil jwtTokenUtil;
+
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
+
+	@Autowired
+	private ApplicationEventPublisher eventPublisher;
+	
+	@Autowired
+	private MessageSource messages;
+	
+	@Value("Authorization")
+	private String tokenHeader;
+	
+	@Value("mySecret")
+	private String secret;
+
+	@RequestMapping(value="/login",
+			method=RequestMethod.POST,
+			consumes= {"application/json", "application/json;charset=UTF-8"},
+			produces= {"application/json"})
+	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException {
+		try{
+			Optional<User> userName = userRepo.findOneByUsername(authenticationRequest.getUsername());
+	
+			
+			if(userName.isPresent()) {
+				if(!userName.get().getBlocked()) {
+					final Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+							authenticationRequest.getUsername(),
+							authenticationRequest.getPassword()));
+					SecurityContextHolder.getContext().setAuthentication(authentication);
+					final UserDetails userDetails = myAppUserDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+					final String token = jwtTokenUtil.generateToken(userDetails);
+					return ResponseEntity.ok(new JwtAuthenticationResponse(token,(UserDetailsCustom)userDetails));
+				} else {
+					return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(messages.getMessage("auth.msg.accLocked", null, new Locale("en)")));
+				}
+			} else {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+			}
+		} catch (BadCredentialsException | UsernameNotFoundException e){
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		}
+	}
+
+	
+}

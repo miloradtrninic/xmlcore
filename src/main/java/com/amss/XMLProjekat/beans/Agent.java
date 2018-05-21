@@ -20,9 +20,6 @@ public class Agent extends User {
    @OneToMany(mappedBy="agent", orphanRemoval=true)
    @Cascade(CascadeType.ALL)
    private Set<Accommodation> accommodations;
-   
-   private Boolean verified;
-   
    private String pib;
 
 }

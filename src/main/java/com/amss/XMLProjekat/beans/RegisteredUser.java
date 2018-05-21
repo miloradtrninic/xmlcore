@@ -30,7 +30,5 @@ public class RegisteredUser extends User {
 	@OneToMany(orphanRemoval=true, mappedBy="registeredUser")
 	@Cascade(CascadeType.ALL)
 	private Set<UserImpression> userImpression;
-	
-	private Boolean blocked;
 
 }
