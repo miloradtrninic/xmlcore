@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.amss.XMLProjekat.beans.AdditionalService;
@@ -52,7 +53,7 @@ public class AdditionalServicesController {
 	@DeleteMapping(value="/delete",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<AdditionalService> delete(@PathVariable("id") Long id) {
+	public ResponseEntity<AdditionalService> delete(@RequestParam("id") Long id) {
 		Optional<AdditionalService> entity = repo.findById(id);
 		if(entity.isPresent()) {
 			repo.delete(entity.get());
