@@ -129,6 +129,9 @@ public class AuthController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		RegisteredUser newUser = mapper.map(newEntity, RegisteredUser.class);
+		newUser.setBlocked(false);
+		newUser.setReservations(new HashSet<>());
+		newUser.setUserImpression(new HashSet<>());
 		newUser.setPassword(passwordEncoder.encode(newEntity.getPassword()));
 		newUser.setRegistrationDate(new Date());
 		return new ResponseEntity<RegisteredUserView>(mapper.map(registeredUserRepo.save(newUser), RegisteredUserView.class), HttpStatus.OK);
