@@ -74,7 +74,7 @@ public class ReservationController {
     	Reservation reservation = new Reservation();
     	reservation.setConfirmed(false);
     	reservation.setEndingDate(reserve.getEndingDate());
-    	reservation.setStartingDate(reservation.getStartingDate());
+    	reservation.setStartingDate(reserve.getStartingDate());
     	reservation.setRegisteredUser(user.get());
     	reservation.setAccommodation(accommodation.get());
     	return new ResponseEntity<ReservationView>(mapper.map(reservationRepo.save(reservation), ReservationView.class), HttpStatus.OK);
