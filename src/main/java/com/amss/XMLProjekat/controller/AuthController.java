@@ -40,7 +40,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
+import com.amss.XMLProjekat.beans.RegisteredUser;
 import com.amss.XMLProjekat.beans.User;
+import com.amss.XMLProjekat.dto.RegisteredUserView;
+import com.amss.XMLProjekat.dto.UserCreation;
+import com.amss.XMLProjekat.repository.RegisteredUserRepo;
 import com.amss.XMLProjekat.repository.UserRepo;
 import com.amss.XMLProjekat.security.JwtAuthenticationRequest;
 import com.amss.XMLProjekat.security.JwtAuthenticationResponse;
@@ -57,7 +61,9 @@ public class AuthController {
 	@Autowired
 	private UserRepo userRepo;
 
-
+	@Autowired
+	private RegisteredUserRepo registeredUserRepo;
+	
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
@@ -78,6 +84,9 @@ public class AuthController {
 	
 	@Value("Authorization")
 	private String tokenHeader;
+	
+	@Autowired
+	ModelMapper mapper;
 	
 	@Value("mySecret")
 	private String secret;
@@ -110,6 +119,21 @@ public class AuthController {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
 	}
-
 	
+	@PostMapping(value="/register",
+			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
+			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<?> insert(@RequestBody UserCreation newEntity) {
+		Optional<User> found = userRepo.findOneByUsername(newEntity.getUsername());
+		if(found.isPresent()) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		RegisteredUser newUser = mapper.map(newEntity, RegisteredUser.class);
+		newUser.setBlocked(false);
+		newUser.setReservations(new HashSet<>());
+		newUser.setUserImpression(new HashSet<>());
+		newUser.setPassword(passwordEncoder.encode(newEntity.getPassword()));
+		newUser.setRegistrationDate(new Date());
+		return new ResponseEntity<RegisteredUserView>(mapper.map(registeredUserRepo.save(newUser), RegisteredUserView.class), HttpStatus.OK);
+	}
 }

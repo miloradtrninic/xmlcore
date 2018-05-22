@@ -10,8 +10,10 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 
 
 
-// TODO implementirani genericki preko TypeInformation https://www.programcreek.com/java-api-examples/index.php?api=org.springframework.data.querydsl.binding.QuerydslPredicate
-
+/* TODO implementirani genericki preko
+TypeInformation https://www.programcreek.com/java-api-examples/index.php?api=org.springframework.data.querydsl.binding.QuerydslPredicate
+QuerydslPredicateBuilder iz springa, override mozda za operacije
+*/
 public class PredicateBuilder<T> {
 	private List<SearchCriteria> params;
     private Class<T> clazz;

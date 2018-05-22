@@ -7,8 +7,10 @@ package com.amss.XMLProjekat.beans;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,6 +19,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,6 +43,12 @@ public abstract class User {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date registrationDate;
 	private Boolean blocked;
-	private String user_type;
+	@Transient
+	private String userType;
+	
+	public String getUserType() {
+		DiscriminatorValue val = this.getClass().getAnnotation( DiscriminatorValue.class );
+	    return val == null ? null : val.value();
+	}
 
 }

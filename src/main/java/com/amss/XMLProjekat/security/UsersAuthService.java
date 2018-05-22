@@ -33,8 +33,13 @@ public class UsersAuthService implements UserDetailsService {
 		
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
 		List<SimpleGrantedAuthority> roleAuths = new ArrayList<>();
+<<<<<<< HEAD
 		roleAuths.add(new SimpleGrantedAuthority(user.get().getUser_type()));
 		UserDetails userDetails = new UserDetailsCustom(user.get().getUsername(), user.get().getPassword(), roleAuths);
+=======
+		roleAuths.add(new SimpleGrantedAuthority(user.get().getUserType()));
+		UserDetails userDetails = new UserDetailsCustom(user.get().getUsername(), passwordEncoder.encode(user.get().getPassword()), roleAuths);
+>>>>>>> b32373e548c2a95bee6c377c6792aad198939b6e
 		return userDetails;
 	}
 
