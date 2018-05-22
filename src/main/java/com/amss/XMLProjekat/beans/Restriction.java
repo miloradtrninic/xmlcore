@@ -32,7 +32,7 @@ public class Restriction {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	
+	@DateTimeFormat(pattern="dd-MM-yyyy")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date restrictionFrom;
 	@DateTimeFormat(pattern="dd-MM-yyyy")

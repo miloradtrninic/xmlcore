@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -54,14 +55,7 @@ public class UserController {
 		}
 		return new ResponseEntity<UserView>(HttpStatus.BAD_REQUEST);
 	}
-	@PostMapping(value="/insert",
-			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
-			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<AgentView> insert(@RequestBody UserCreation newEntity) {
-		Agent newAgent = mapper.map(newEntity, Agent.class);
-		newAgent.setRegistrationDate(new Date());
-		return new ResponseEntity<AgentView>(mapper.map(agentRepo.save(newAgent), AgentView.class), HttpStatus.OK);
-	}
+	
 	
 	@DeleteMapping(value="/delete",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,

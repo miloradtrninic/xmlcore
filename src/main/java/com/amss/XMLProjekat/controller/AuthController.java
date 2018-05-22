@@ -116,7 +116,7 @@ public class AuthController {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
 			}
 		} catch (BadCredentialsException | UsernameNotFoundException e){
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
 		}
 	}
 	

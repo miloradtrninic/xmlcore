@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import com.amss.XMLProjekat.beans.User;
 import com.amss.XMLProjekat.repository.UserRepo;
 
+import lombok.extern.slf4j.Slf4j;
+
 
 
 @Service("myAppUserDetailsService")
@@ -28,13 +30,13 @@ public class UsersAuthService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Optional<User> user = userDao.findOneByUsername(username);
-		if(user.isPresent())
+		if(!user.isPresent())
 			throw new UsernameNotFoundException("Username not found.");
 		
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
 		List<SimpleGrantedAuthority> roleAuths = new ArrayList<>();
 		roleAuths.add(new SimpleGrantedAuthority(user.get().getUserType()));
-		UserDetails userDetails = new UserDetailsCustom(user.get().getUsername(), passwordEncoder.encode(user.get().getPassword()), roleAuths);
+		UserDetails userDetails = new UserDetailsCustom(user.get().getUsername(), user.get().getPassword(), roleAuths);
 		return userDetails;
 	}
 

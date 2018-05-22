@@ -30,8 +30,11 @@ import com.amss.XMLProjekat.repository.AccomodationRepo;
 import com.amss.XMLProjekat.repository.RegisteredUserRepo;
 import com.amss.XMLProjekat.repository.ReservationRepo;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping(value="/reservation")
+@Slf4j
 public class ReservationController {
 	@Autowired
 	ReservationRepo reservationRepo;
@@ -47,6 +50,7 @@ public class ReservationController {
 	public ResponseEntity<?> getMy(@NotNull Pageable p) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     	String username = authentication.getName();
+    	log.info(username);
     	Optional<RegisteredUser> user = registeredUserRepo.findOneByUsername(username);
     	if(!user.isPresent()) {
     		return new ResponseEntity<ReservationView>(HttpStatus.BAD_REQUEST);

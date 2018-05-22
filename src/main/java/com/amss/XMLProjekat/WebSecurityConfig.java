@@ -15,7 +15,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.amss.XMLProjekat.security.JwtAuthenticationTokenFilter;
 import com.amss.XMLProjekat.security.RestAuthenticationEntryPoint;
 
 
@@ -43,6 +45,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .userDetailsService(this.userDetailsService)
                 .passwordEncoder(passwordEncoder());
     }
+    @Bean
+    public JwtAuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
+        return new JwtAuthenticationTokenFilter();
+    }
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -65,7 +71,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	               // ).permitAll()
 	                .antMatchers("*").permitAll()
 	                .and()
-	                .anonymous();
+	                .anonymous()
+	                .and()
+                .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
     }
     
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
