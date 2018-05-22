@@ -12,8 +12,8 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor
 public class ReservationView {
 	private Long id;
-	private String accommodatioName;
-	private String accommodatioId;
+	private String accommodationName;
+	private String accommodationId;
 	private String registeredUserUsername;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private Date startingDate;

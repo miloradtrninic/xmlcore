@@ -14,8 +14,6 @@ import org.springframework.stereotype.Repository;
 import com.amss.XMLProjekat.beans.Accommodation;
 import com.amss.XMLProjekat.beans.QAccommodation;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.dsl.DateTimeExpression;
-import com.querydsl.core.types.dsl.DateTimePath;
 import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.core.types.dsl.StringPath;
 

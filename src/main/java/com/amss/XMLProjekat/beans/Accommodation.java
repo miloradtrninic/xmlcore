@@ -53,7 +53,7 @@ public class Accommodation {
 	@Cascade(CascadeType.ALL)
 	private Set<Restriction> restrictions;
 
-	@ManyToOne(fetch=FetchType.EAGER)
+	@ManyToOne(fetch=FetchType.EAGER, optional=false)
 	private Category category;
 
 }
