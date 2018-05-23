@@ -20,11 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.amss.XMLProjekat.beans.Message;
 import com.amss.XMLProjekat.beans.RegisteredUser;
 import com.amss.XMLProjekat.beans.Reservation;
+import com.amss.XMLProjekat.beans.User;
 import com.amss.XMLProjekat.dto.MessageCreation;
 import com.amss.XMLProjekat.dto.MessageView;
 import com.amss.XMLProjekat.repository.MessageRepo;
 import com.amss.XMLProjekat.repository.RegisteredUserRepo;
 import com.amss.XMLProjekat.repository.ReservationRepo;
+import com.amss.XMLProjekat.repository.UserRepo;
 
 @RestController
 @RequestMapping(value="message")
@@ -34,6 +36,8 @@ public class MessageController {
 	MessageRepo messageRepo;
 	@Autowired
 	RegisteredUserRepo registeredUserRepo;
+	@Autowired
+	UserRepo userRepo;
 	@Autowired
 	ModelMapper mapper;
 	@Autowired
@@ -80,11 +84,11 @@ public class MessageController {
 		}
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     	String username = authentication.getName();
-    	Optional<RegisteredUser> fromUser = registeredUserRepo.findOneByUsername(username);
+    	Optional<User> fromUser = userRepo.findOneByUsername(username);
     	if(!fromUser.isPresent()) {
     		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     	}
-    	Optional<RegisteredUser> toUser = registeredUserRepo.findOneByUsername(newEntity.getToUserUsername());
+    	Optional<User> toUser = userRepo.findOneByUsername(newEntity.getToUserUsername());
     	if(!toUser.isPresent()) {
     		return new ResponseEntity<>("Recepient "+ newEntity.getToUserUsername()+ " not found.",HttpStatus.BAD_REQUEST);
     	}
