@@ -34,8 +34,8 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element name="reservationId" type="xs:long" />
-				<xs:element name="agentId" type="xs:long" />
-				<xs:element name="receiverId" type="xs:long" />
+				<xs:element name="agentUsername" type="xs:string" />
+				<xs:element name="receiverUsername" type="xs:string" />
 				<xs:element name="content" type="xs:string" />
 			</xs:sequence>
 		</xs:complexType>

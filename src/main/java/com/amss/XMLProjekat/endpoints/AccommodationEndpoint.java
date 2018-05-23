@@ -145,8 +145,8 @@ public class AccommodationEndpoint {
 		response.setSuccess(false);
 		Message message = new Message();
 		message.setContent(request.getContent());
-		Optional<User> fromUser = userRepo.findById(request.getAgentId());
-		Optional<User> toUser = userRepo.findById(request.getReceiverId());
+		Optional<User> fromUser = userRepo.findOneByUsername(request.getAgentUsername());
+		Optional<User> toUser = userRepo.findOneByUsername(request.getReceiverUsername());
 		Optional<Reservation> reservation = reservationRepo.findById(request.getReservationId());
 		if(fromUser.isPresent() && toUser.isPresent() && reservation.isPresent()) {
 			message.setFromUser(fromUser.get());

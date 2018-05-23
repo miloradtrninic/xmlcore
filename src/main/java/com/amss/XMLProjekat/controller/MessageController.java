@@ -79,17 +79,17 @@ public class MessageController {
 		}
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     	String username = authentication.getName();
-    	Optional<RegisteredUser> user = registeredUserRepo.findOneByUsername(username);
-    	if(!user.isPresent()) {
+    	Optional<RegisteredUser> fromUser = registeredUserRepo.findOneByUsername(username);
+    	if(!fromUser.isPresent()) {
     		return new ResponseEntity<Message>(HttpStatus.BAD_REQUEST);
     	}
-    	Optional<RegisteredUser> toUser = registeredUserRepo.findById(newEntity.getToUserId());
+    	Optional<RegisteredUser> toUser = registeredUserRepo.findOneByUsername(newEntity.getToUserUsername());
     	if(!toUser.isPresent()) {
     		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     	}
 		Message message = new Message();
 		message.setContent(newEntity.getContent());
-		message.setFromUser(user.get());
+		message.setFromUser(fromUser.get());
 		message.setReservation(reservation.get());
 		message.setToUser(toUser.get());
 		return new ResponseEntity<>(mapper.map(messageRepo.save(message), MessageView.class), HttpStatus.OK);
