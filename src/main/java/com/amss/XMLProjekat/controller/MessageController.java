@@ -76,17 +76,17 @@ public class MessageController {
 	public ResponseEntity<?> insert(@RequestBody MessageCreation newEntity) {
 		Optional<Reservation> reservation = reservationRepo.findById(newEntity.getReservationId());
 		if(!reservation.isPresent()) {
-			return new ResponseEntity<Message>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("Reservation " + newEntity.getReservationId()+ " not found.",HttpStatus.BAD_REQUEST);
 		}
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     	String username = authentication.getName();
     	Optional<RegisteredUser> fromUser = registeredUserRepo.findOneByUsername(username);
     	if(!fromUser.isPresent()) {
-    		return new ResponseEntity<Message>(HttpStatus.BAD_REQUEST);
+    		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     	}
     	Optional<RegisteredUser> toUser = registeredUserRepo.findOneByUsername(newEntity.getToUserUsername());
     	if(!toUser.isPresent()) {
-    		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    		return new ResponseEntity<>("Recepient "+ newEntity.getToUserUsername()+ " not found.",HttpStatus.BAD_REQUEST);
     	}
 		Message message = new Message();
 		message.setContent(newEntity.getContent());
