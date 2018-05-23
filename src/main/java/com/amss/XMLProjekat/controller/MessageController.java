@@ -1,5 +1,6 @@
 package com.amss.XMLProjekat.controller;
 
+import java.util.Date;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
@@ -90,6 +91,7 @@ public class MessageController {
 		Message message = new Message();
 		message.setContent(newEntity.getContent());
 		message.setFromUser(fromUser.get());
+		message.setDateSent(new Date());
 		message.setReservation(reservation.get());
 		message.setToUser(toUser.get());
 		return new ResponseEntity<>(mapper.map(messageRepo.save(message), MessageView.class), HttpStatus.OK);
