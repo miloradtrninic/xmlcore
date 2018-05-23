@@ -55,5 +55,8 @@ public class Accommodation {
 
 	@ManyToOne(fetch=FetchType.EAGER, optional=false)
 	private Category category;
+	
+	@OneToMany(mappedBy="accommodation", fetch=FetchType.EAGER)
+	private Set<UserImpression> userImpressions;
 
 }

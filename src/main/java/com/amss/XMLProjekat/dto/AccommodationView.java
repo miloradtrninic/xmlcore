@@ -22,4 +22,5 @@ public class AccommodationView {
 	private String agentUsername;
 	private List<RestrictionView> restrictions;
 	private String categoryName;
+	private List<UserImpressionView> userImpressions;
 }
