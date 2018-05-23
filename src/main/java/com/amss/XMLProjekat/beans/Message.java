@@ -5,11 +5,15 @@ package com.amss.XMLProjekat.beans;
  * Purpose: Defines the Class Message
  ***********************************************************************/
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,6 +35,9 @@ public class Message {
 	
 	@ManyToOne(optional=false)
 	private Reservation reservation;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dateSent;
 	
 
 }
