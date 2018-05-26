@@ -42,7 +42,7 @@ public class Accommodation {
 	@ManyToMany(fetch=FetchType.EAGER)
 	private Set<AdditionalService> additionalServices;
 
-	@OneToMany(orphanRemoval=true, fetch=FetchType.EAGER)
+	@OneToMany(orphanRemoval=true, fetch=FetchType.EAGER, mappedBy="accommodation")
 	@Cascade(CascadeType.ALL)
 	private Set<PricePlan> pricePlan;
 
@@ -58,5 +58,7 @@ public class Accommodation {
 	
 	@OneToMany(mappedBy="accommodation", fetch=FetchType.EAGER)
 	private Set<UserImpression> userImpressions;
+	
+	private Double rating;
 
 }

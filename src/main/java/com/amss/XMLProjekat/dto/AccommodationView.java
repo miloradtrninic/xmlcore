@@ -23,4 +23,5 @@ public class AccommodationView {
 	private List<RestrictionView> restrictions;
 	private String categoryName;
 	private List<UserImpressionView> userImpressions;
+	private Double rating;
 }

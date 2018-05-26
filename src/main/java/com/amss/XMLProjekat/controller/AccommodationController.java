@@ -3,12 +3,18 @@ package com.amss.XMLProjekat.controller;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+import javax.validation.constraints.NotNull;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Order;
+import org.springframework.data.querydsl.QPageRequest;
+import org.springframework.data.querydsl.QSort;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,6 +30,8 @@ import com.amss.XMLProjekat.beans.Accommodation;
 import com.amss.XMLProjekat.dto.AccommodationView;
 import com.amss.XMLProjekat.repository.AccomodationRepo;
 import com.amss.XMLProjekat.repository.dsl.PredicateBuilder;
+import com.amss.XMLProjekat.repository.dsl.QDSLPageable;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
@@ -60,7 +68,7 @@ public class AccommodationController {
 	}*/
 	@RequestMapping(method = RequestMethod.GET, value = "all")
 	@ResponseBody
-	public ResponseEntity<?> searchDSL(@QuerydslPredicate(root=Accommodation.class) Predicate predicate , @javax.validation.constraints.NotNull Pageable page) {
+	public ResponseEntity<?> searchDSL(@QuerydslPredicate(root=Accommodation.class) Predicate predicate,  Pageable page) {
         return new ResponseEntity<Page<AccommodationView>>(repo.findAll(predicate, page).map(a -> mapper.map(a, AccommodationView.class)), HttpStatus.OK);
 	}
 	
@@ -74,4 +82,5 @@ public class AccommodationController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
+
 }

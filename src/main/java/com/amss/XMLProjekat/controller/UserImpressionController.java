@@ -60,6 +60,10 @@ public class UserImpressionController {
     	if(!user.isPresent()) {
     		return new ResponseEntity<UserImpression>(HttpStatus.BAD_REQUEST);
     	}
+    	Integer ratingSum = accommodation.get().getUserImpressions().stream().mapToInt(i -> i.getRating()).sum();
+    	if(ratingSum > 0) {
+    		accommodation.get().setRating(ratingSum * 1.0 / accommodation.get().getUserImpressions().size());
+    	}
 		UserImpression userImpression = new UserImpression();
 		userImpression.setComment(newEntity.getComment());
 		userImpression.setRating(newEntity.getRating());
