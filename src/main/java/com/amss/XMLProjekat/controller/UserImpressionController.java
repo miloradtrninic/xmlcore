@@ -2,8 +2,12 @@ package com.amss.XMLProjekat.controller;
 
 import java.util.Optional;
 
+import javax.validation.constraints.NotNull;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.amss.XMLProjekat.beans.Accommodation;
 import com.amss.XMLProjekat.beans.RegisteredUser;
 import com.amss.XMLProjekat.beans.UserImpression;
+import com.amss.XMLProjekat.dto.AgentView;
 import com.amss.XMLProjekat.dto.UserImpressionCreation;
 import com.amss.XMLProjekat.dto.UserImpressionView;
 import com.amss.XMLProjekat.repository.AccomodationRepo;
@@ -36,12 +41,19 @@ public class UserImpressionController {
 	@Autowired
 	ModelMapper mapper;
 	
+	@RequestMapping(value="/all", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public Page<UserImpressionView> getAll(@NotNull final Pageable p) {
+		return repo.findAll(p).map(u -> mapper.map(u, UserImpressionView.class));
+	}
+	
 	@PutMapping(value="/update",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<?> update(@RequestBody UserImpression newEntity) {
-		if(repo.existsById(newEntity.getId())) {
-			return new ResponseEntity<UserImpressionView>(mapper.map(repo.save(newEntity), UserImpressionView.class), HttpStatus.OK);
+	public ResponseEntity<?> update(@RequestBody UserImpressionView newEntity) {
+		Optional<UserImpression> impression = repo.findById(newEntity.getId());
+		if(impression.isPresent()) {
+			impression.get().setVerified(newEntity.isVerified());
+			return new ResponseEntity<UserImpressionView>(mapper.map(repo.save(impression.get()), UserImpressionView.class), HttpStatus.OK);
 		}
 		return new ResponseEntity<UserImpressionView>(HttpStatus.BAD_REQUEST);
 	}

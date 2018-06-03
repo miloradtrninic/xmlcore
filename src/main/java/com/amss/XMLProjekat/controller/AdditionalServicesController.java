@@ -51,8 +51,7 @@ public class AdditionalServicesController {
 	}
 	
 	@DeleteMapping(value="/delete",
-			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
-			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+			produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<AdditionalService> delete(@RequestParam("id") Long id) {
 		Optional<AdditionalService> entity = repo.findById(id);
 		if(entity.isPresent()) {

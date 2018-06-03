@@ -55,8 +55,7 @@ public class CategoryController {
 	}
 	
 	@DeleteMapping(value="/delete",
-			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
-			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+			produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<Category> delete(@RequestParam("id") Long id) {
 		Optional<Category> accType = categoryRepo.findById(id);
 		if(accType.isPresent()) {

@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -37,9 +38,12 @@ public class AgentController {
 	@Autowired
 	ModelMapper mapper;
 	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
+	
 	@RequestMapping(value="/all", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public Page<UserView> getAll(@NotNull final Pageable p) {
-		return agentRepo.findAll(p).map(u -> mapper.map(u, UserView.class));
+	public Page<AgentView> getAll(@NotNull final Pageable p) {
+		return agentRepo.findAll(p).map(u -> mapper.map(u, AgentView.class));
 	}
 	
 	@PostMapping(value="/insert",
@@ -47,6 +51,7 @@ public class AgentController {
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<AgentView> insert(@RequestBody AgentCreation newEntity) {
 		Agent newAgent = mapper.map(newEntity, Agent.class);
+		newAgent.setPassword(passwordEncoder.encode(newEntity.getPassword()));
 		newAgent.setBlocked(false);
 		newAgent.setRegistrationDate(new Date());
 		return new ResponseEntity<AgentView>(mapper.map(agentRepo.save(newAgent), AgentView.class), HttpStatus.OK);
@@ -56,17 +61,23 @@ public class AgentController {
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> update(@RequestBody AgentView newEntity) {
-		if(agentRepo.existsById(newEntity.getId())) {
-			Agent agent = mapper.map(newEntity, Agent.class);
+		Optional<Agent> entity = agentRepo.findById(newEntity.getId());
+		if(entity.isPresent()) {
+			Agent agent = entity.get();
+			agent.setBlocked(newEntity.getBlocked());
+			agent.setEmail(newEntity.getEmail());
+			agent.setFirstName(newEntity.getFirstName());
+			agent.setLastName(newEntity.getLastName());
+			agent.setPib(newEntity.getPib());
 			return new ResponseEntity<UserView>(mapper.map(agentRepo.save(agent), AgentView.class), HttpStatus.OK);
 		}
+		
 		return new ResponseEntity<UserView>(HttpStatus.BAD_REQUEST);
 	}
 	
 	
 	@DeleteMapping(value="/delete",
-			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
-			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+			produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<?> delete(@RequestParam("id") Long id) {
 		Optional<Agent> entity = agentRepo.findById(id);
 		if(entity.isPresent()) {

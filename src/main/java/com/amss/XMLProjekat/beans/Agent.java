@@ -4,6 +4,7 @@ import java.util.Set;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Cascade;
@@ -17,9 +18,17 @@ import lombok.Setter;
 @DiscriminatorValue("agent")
 @Getter @Setter @NoArgsConstructor
 public class Agent extends User {
-   @OneToMany(mappedBy="agent", orphanRemoval=true)
-   @Cascade(CascadeType.ALL)
-   private Set<Accommodation> accommodations;
-   private String pib;
+	@OneToMany(mappedBy="agent", orphanRemoval=true, fetch=FetchType.LAZY)
+	@Cascade(CascadeType.ALL)
+	private Set<Accommodation> accommodations;
+	private String pib;
 
+	public void setAccommodations(Set<Accommodation> roles) {
+		if (this.accommodations == null) {
+			this.accommodations = roles;
+		} else {
+			this.accommodations.retainAll(roles);
+			this.accommodations.addAll(roles);
+		}
+	}
 }

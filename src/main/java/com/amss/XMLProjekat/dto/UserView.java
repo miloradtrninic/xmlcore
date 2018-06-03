@@ -17,4 +17,5 @@ public class UserView {
 	private String username;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private Date registrationDate;
+	private Boolean blocked;
 }

@@ -46,7 +46,7 @@ public class Accommodation {
 	@Cascade(CascadeType.ALL)
 	private Set<PricePlan> pricePlan;
 
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
+	@ManyToOne(optional=false)
 	private Agent agent;
 
 	@OneToMany(orphanRemoval=true, mappedBy="accommodation", fetch=FetchType.EAGER)

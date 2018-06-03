@@ -61,8 +61,7 @@ public class AccomodationTypeController {
 	}
 	
 	@DeleteMapping(value="/delete",
-			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
-			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+			produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<AccommodationType> delete(@RequestParam("id") Long id) {
 		Optional<AccommodationType> accType = accommodationTypeRepo.findById(id);
 		if(accType.isPresent()) {
