@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,6 +43,7 @@ public class UserImpressionController {
 	ModelMapper mapper;
 	
 	@RequestMapping(value="/all", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@Secured(value={"admin"})
 	public Page<UserImpressionView> getAll(@NotNull final Pageable p) {
 		return repo.findAll(p).map(u -> mapper.map(u, UserImpressionView.class));
 	}
@@ -49,6 +51,7 @@ public class UserImpressionController {
 	@PutMapping(value="/update",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@Secured(value={"admin"})
 	public ResponseEntity<?> update(@RequestBody UserImpressionView newEntity) {
 		Optional<UserImpression> impression = repo.findById(newEntity.getId());
 		if(impression.isPresent()) {
@@ -61,6 +64,7 @@ public class UserImpressionController {
 	@PostMapping(value="/insert",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@Secured(value={"registered"})
 	public ResponseEntity<?> insert(@RequestBody UserImpressionCreation newEntity) {
 		Optional<Accommodation> accommodation = accomodationRepo.findById(newEntity.getAccommodationId());
 		if(!accommodation.isPresent()) {

@@ -21,7 +21,7 @@ public class RestAuthenticationEntryPoint extends BasicAuthenticationEntryPoint 
 	
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		setRealmName("TicketApp");
+		setRealmName("XMLProjekat");
 	}
 	
 }

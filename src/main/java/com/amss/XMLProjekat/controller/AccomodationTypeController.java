@@ -12,6 +12,7 @@ import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +46,7 @@ public class AccomodationTypeController {
 	@PutMapping(value="/update",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@Secured(value="admin")
 	public ResponseEntity<AccommodationType> update(@RequestBody AccommodationType accTypeNew) {
 		if(accommodationTypeRepo.existsById(accTypeNew.getId())) {
 			AccommodationType updated = accommodationTypeRepo.save(accTypeNew);
@@ -56,12 +58,14 @@ public class AccomodationTypeController {
 	@PostMapping(value="/insert",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@Secured(value="admin")
 	public ResponseEntity<AccommodationType> insert(@RequestBody AccommodationType accTypeNew) {
 		return new ResponseEntity<AccommodationType>(accommodationTypeRepo.save(accTypeNew), HttpStatus.OK);
 	}
 	
 	@DeleteMapping(value="/delete",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@Secured(value="admin")
 	public ResponseEntity<AccommodationType> delete(@RequestParam("id") Long id) {
 		Optional<AccommodationType> accType = accommodationTypeRepo.findById(id);
 		if(accType.isPresent()) {

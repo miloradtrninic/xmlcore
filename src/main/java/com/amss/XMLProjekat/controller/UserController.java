@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,6 +43,7 @@ public class UserController {
 	ModelMapper mapper;
 	
 	@RequestMapping(value="/all", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@Secured(value={"admin"})
 	public Page<UserView> getAll(@NotNull final Pageable p) {
 		return repo.findAll(p).map(u -> mapper.map(u, UserView.class));
 	}
@@ -49,6 +51,7 @@ public class UserController {
 	@PutMapping(value="/update",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@Secured(value={"admin"})
 	public ResponseEntity<?> update(@RequestBody User newEntity) {
 		if(repo.existsById(newEntity.getId())) {
 			return new ResponseEntity<UserView>(mapper.map(repo.save(newEntity), UserView.class), HttpStatus.OK);
@@ -59,6 +62,7 @@ public class UserController {
 	
 	@DeleteMapping(value="/delete",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@Secured(value={"admin"})
 	public ResponseEntity<?> delete(@RequestParam("id") Long id) {
 		Optional<User> entity = repo.findById(id);
 		if(entity.isPresent()) {

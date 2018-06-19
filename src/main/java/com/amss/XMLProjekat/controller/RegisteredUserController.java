@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,6 +33,7 @@ public class RegisteredUserController {
 	ModelMapper mapper;
 	
 	@RequestMapping(value="/all", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@Secured(value="admin")
 	public Page<RegisteredUserView> getAll(@NotNull final Pageable p) {
 		return repo.findAll(p).map(u -> mapper.map(u, RegisteredUserView.class));
 	}
@@ -39,6 +41,7 @@ public class RegisteredUserController {
 	@PutMapping(value="/update",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@Secured(value="admin")
 	public ResponseEntity<?> update(@RequestBody RegisteredUserView newEntity) {
 		Optional<RegisteredUser> entity = repo.findById(newEntity.getId());
 		if(entity.isPresent()) {
@@ -55,6 +58,7 @@ public class RegisteredUserController {
 	
 	@DeleteMapping(value="/delete",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@Secured(value="admin")
 	public ResponseEntity<?> delete(@RequestParam("id") Long id) {
 		Optional<RegisteredUser> entity = repo.findById(id);
 		if(entity.isPresent()) {

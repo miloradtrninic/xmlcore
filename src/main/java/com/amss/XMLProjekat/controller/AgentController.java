@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,6 +50,7 @@ public class AgentController {
 	@PostMapping(value="/insert",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@Secured(value="admin")
 	public ResponseEntity<AgentView> insert(@RequestBody AgentCreation newEntity) {
 		Agent newAgent = mapper.map(newEntity, Agent.class);
 		newAgent.setPassword(passwordEncoder.encode(newEntity.getPassword()));
@@ -60,6 +62,7 @@ public class AgentController {
 	@PutMapping(value="/update",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@Secured(value="admin")
 	public ResponseEntity<?> update(@RequestBody AgentView newEntity) {
 		Optional<Agent> entity = agentRepo.findById(newEntity.getId());
 		if(entity.isPresent()) {
@@ -78,6 +81,7 @@ public class AgentController {
 	
 	@DeleteMapping(value="/delete",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@Secured(value="admin")
 	public ResponseEntity<?> delete(@RequestParam("id") Long id) {
 		Optional<Agent> entity = agentRepo.findById(id);
 		if(entity.isPresent()) {

@@ -4,9 +4,11 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.hibernate.HibernateException;
 import org.modelmapper.ModelMapper;
@@ -23,6 +25,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -108,12 +111,16 @@ public class AuthController {
 					SecurityContextHolder.getContext().setAuthentication(authentication);
 					final UserDetails userDetails = myAppUserDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 					final String token = jwtTokenUtil.generateToken(userDetails);
-					return ResponseEntity.ok(new JwtAuthenticationResponse(token,(UserDetailsCustom)userDetails));
+					return ResponseEntity.ok(new JwtAuthenticationResponse(token,userDetails.getUsername(), 
+							userDetails.getAuthorities()
+							.stream()
+							.map(r -> r.getAuthority())
+							.collect(Collectors.toList())));
 				} else {
 					return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(messages.getMessage("auth.msg.accLocked", null, new Locale("en)")));
 				}
 			} else {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+				return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User not found");
 			}
 		} catch (BadCredentialsException | UsernameNotFoundException e){
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());

@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,6 +40,7 @@ public class CategoryController {
 	@PutMapping(value="/update",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@Secured(value="admin")
 	public ResponseEntity<?> update(@RequestBody Category newCat) {
 		if(categoryRepo.existsById(newCat.getId())) {
 			Category updated = categoryRepo.save(newCat);
@@ -50,12 +52,14 @@ public class CategoryController {
 	@PostMapping(value="/insert",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@Secured(value="admin")
 	public ResponseEntity<Category> insert(@RequestBody Category newCat) {
 		return new ResponseEntity<Category>(categoryRepo.save(newCat), HttpStatus.OK);
 	}
 	
 	@DeleteMapping(value="/delete",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@Secured(value="admin")
 	public ResponseEntity<Category> delete(@RequestParam("id") Long id) {
 		Optional<Category> accType = categoryRepo.findById(id);
 		if(accType.isPresent()) {

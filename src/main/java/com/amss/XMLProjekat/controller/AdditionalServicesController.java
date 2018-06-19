@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,6 +37,7 @@ public class AdditionalServicesController {
 	@PutMapping(value="/update",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@Secured(value="admin")
 	public ResponseEntity<AdditionalService> update(@RequestBody AdditionalService newEntity) {
 		if(repo.existsById(newEntity.getId())) {
 			return new ResponseEntity<AdditionalService>(repo.save(newEntity), HttpStatus.OK);
@@ -46,12 +48,14 @@ public class AdditionalServicesController {
 	@PostMapping(value="/insert",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@Secured(value="admin")
 	public ResponseEntity<AdditionalService> insert(@RequestBody AdditionalService newEntity) {
 		return new ResponseEntity<AdditionalService>(repo.save(newEntity), HttpStatus.OK);
 	}
 	
 	@DeleteMapping(value="/delete",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@Secured(value="admin")
 	public ResponseEntity<AdditionalService> delete(@RequestParam("id") Long id) {
 		Optional<AdditionalService> entity = repo.findById(id);
 		if(entity.isPresent()) {

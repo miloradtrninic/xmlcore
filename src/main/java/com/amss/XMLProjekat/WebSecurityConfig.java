@@ -35,7 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(10);
+        return new BCryptPasswordEncoder();
     }
     
 
@@ -69,7 +69,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	                     //   "/**/*.css",
 	                     ///   "/**/*.js"
 	               // ).permitAll()
-	                .antMatchers("*").permitAll()
+	                .antMatchers("/auth**").permitAll()
+	                .anyRequest().authenticated()
 	                .and()
 	                .anonymous()
 	                .and()
