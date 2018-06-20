@@ -65,7 +65,8 @@ public class AccommodationController {
         }
         BooleanExpression exp = builder.build();
         return new ResponseEntity<Page<AccommodationView>>(repo.findAll(exp, page).map(a -> mapper.map(a, AccommodationView.class)), HttpStatus.OK);
-	}*/
+	}
+	*/
 	@RequestMapping(method = RequestMethod.GET, value = "all")
 	@ResponseBody
 	public ResponseEntity<?> searchDSL(@QuerydslPredicate(root=Accommodation.class) Predicate predicate,  Pageable page) {

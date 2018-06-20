@@ -9,6 +9,7 @@ import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -69,7 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	                     //   "/**/*.css",
 	                     ///   "/**/*.js"
 	               // ).permitAll()
-	                .antMatchers("/auth**").permitAll()
+	                .antMatchers("/auth**", "/ws/accommodations.wsdl").permitAll()
 	                .anyRequest().authenticated()
 	                .and()
 	                .anonymous()
@@ -82,10 +83,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-   /*@Override
+    @Override
     public void configure(WebSecurity web) throws Exception {
         // TokenAuthenticationFilter will ignore the below paths
-        web.ignoring().antMatchers("/auth/**");
-    }*/
+        web.ignoring().antMatchers("*.wsdl");
+    }
 }
 
