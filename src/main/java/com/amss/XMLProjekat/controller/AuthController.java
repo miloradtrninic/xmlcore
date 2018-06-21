@@ -47,6 +47,7 @@ import com.amss.XMLProjekat.beans.RegisteredUser;
 import com.amss.XMLProjekat.beans.User;
 import com.amss.XMLProjekat.dto.RegisteredUserView;
 import com.amss.XMLProjekat.dto.UserCreation;
+import com.amss.XMLProjekat.dto.UserView;
 import com.amss.XMLProjekat.repository.RegisteredUserRepo;
 import com.amss.XMLProjekat.repository.UserRepo;
 import com.amss.XMLProjekat.security.JwtAuthenticationRequest;
@@ -93,7 +94,20 @@ public class AuthController {
 	
 	@Value("mySecret")
 	private String secret;
-
+	
+	@GetMapping(value="/getone")
+	public ResponseEntity<?> getByUsername(@RequestParam("username") String username) {
+		Optional<User> user = userRepo.findOneByUsername(username);
+		if(user.isPresent()) {
+			if(user.get().getBlocked()) {
+				return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(messages.getMessage("auth.msg.accLocked", null, new Locale("en)")));
+			}
+			return ResponseEntity.ok(mapper.map(user.get(), UserView.class));
+		} else {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User not found");
+		} 
+	}
+	
 	@RequestMapping(value="/login",
 			method=RequestMethod.POST,
 			consumes= {"application/json", "application/json;charset=UTF-8"},
