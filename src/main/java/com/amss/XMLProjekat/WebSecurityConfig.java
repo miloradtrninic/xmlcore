@@ -25,68 +25,68 @@ import com.amss.XMLProjekat.security.RestAuthenticationEntryPoint;
 @Configuration
 //@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled=true)
+@EnableGlobalMethodSecurity(prePostEnabled=true, securedEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private RestAuthenticationEntryPoint basicAuthenticationEntryPoint;
+	@Autowired
+	private RestAuthenticationEntryPoint basicAuthenticationEntryPoint;
 
-    @Autowired
-    private UserDetailsService userDetailsService;
-    
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-    
+	@Autowired
+	private UserDetailsService userDetailsService;
 
-    @Autowired
-    public void configureAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-    		auth
-                .userDetailsService(this.userDetailsService)
-                .passwordEncoder(passwordEncoder());
-    }
-    @Bean
-    public JwtAuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
-        return new JwtAuthenticationTokenFilter();
-    }
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
-    @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception {
-    	httpSecurity.formLogin().disable(); 
-    	httpSecurity.csrf().disable();
-        httpSecurity.exceptionHandling().authenticationEntryPoint(basicAuthenticationEntryPoint).and()
-                // don't create session
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 
-                .authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-	                ///.antMatchers(
-	                    //    HttpMethod.GET,
-	                     //   "/",
-	                     ///   "/*.html",
-	                     //   "/favicon.ico",
-	                     //   "/**/*.html",
-	                     //   "/**/*.css",
-	                     ///   "/**/*.js"
-	               // ).permitAll()
-	                .antMatchers("/auth/login", "/auth/register", "/ws/accommodations.wsdl").permitAll()
-	                .anyRequest().authenticated()
-	                .and()
-	                .anonymous()
-	                .and()
-                .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
-    }
-    
-    @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        // TokenAuthenticationFilter will ignore the below paths
-        web.ignoring().antMatchers("*.wsdl");
-    }
+	@Autowired
+	public void configureAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+		auth
+		.userDetailsService(this.userDetailsService)
+		.passwordEncoder(passwordEncoder());
+	}
+	@Bean
+	public JwtAuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
+		return new JwtAuthenticationTokenFilter();
+	}
+
+	@Override
+	protected void configure(HttpSecurity httpSecurity) throws Exception {
+		httpSecurity.formLogin().disable(); 
+		httpSecurity.csrf().disable();
+		httpSecurity.exceptionHandling().authenticationEntryPoint(basicAuthenticationEntryPoint).and()
+		// don't create session
+		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+
+		.authorizeRequests()
+		.antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+		///.antMatchers(
+		//    HttpMethod.GET,
+		//   "/",
+		///   "/*.html",
+		//   "/favicon.ico",
+		//   "/**/*.html",
+		//   "/**/*.css",
+		///   "/**/*.js"
+		// ).permitAll()
+		.anyRequest()
+			.permitAll()
+		.and()
+			.anonymous()
+		.and()
+		.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+	}
+
+	@Bean(name = BeanIds.AUTHENTICATION_MANAGER)
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		// TokenAuthenticationFilter will ignore the below paths
+		web.ignoring().antMatchers("/auth/login", "/auth/register", "/ws/accommodations.wsdl");
+	}
 }
 

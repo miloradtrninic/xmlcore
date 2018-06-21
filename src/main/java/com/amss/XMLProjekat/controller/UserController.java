@@ -43,7 +43,7 @@ public class UserController {
 	ModelMapper mapper;
 	
 	@RequestMapping(value="/all", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@Secured(value={"admin"})
+	@Secured({"ROLE_admin"})
 	public Page<UserView> getAll(@NotNull final Pageable p) {
 		return repo.findAll(p).map(u -> mapper.map(u, UserView.class));
 	}
@@ -51,7 +51,7 @@ public class UserController {
 	@PutMapping(value="/update",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@Secured(value={"admin"})
+	@Secured({"ROLE_admin"})
 	public ResponseEntity<?> update(@RequestBody User newEntity) {
 		if(repo.existsById(newEntity.getId())) {
 			return new ResponseEntity<UserView>(mapper.map(repo.save(newEntity), UserView.class), HttpStatus.OK);
@@ -62,7 +62,7 @@ public class UserController {
 	
 	@DeleteMapping(value="/delete",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@Secured(value={"admin"})
+	@Secured({"ROLE_admin"})
 	public ResponseEntity<?> delete(@RequestParam("id") Long id) {
 		Optional<User> entity = repo.findById(id);
 		if(entity.isPresent()) {

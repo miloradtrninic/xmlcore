@@ -39,6 +39,7 @@ public class AccomodationTypeController {
 	ModelMapper mapper;
 	
 	@GetMapping(value="/all", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@Secured({"ROLE_ANONYMOUS", "ROLE_agent", "ROLE_admin", "ROLE_registered"})
 	public Page<AccommodationTypeView> getAll(@NotNull final Pageable p) {
 		return accommodationTypeRepo.findAll(p).map(a -> mapper.map(a, AccommodationTypeView.class));
 	}
@@ -46,7 +47,7 @@ public class AccomodationTypeController {
 	@PutMapping(value="/update",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@Secured(value="admin")
+	@Secured({"ROLE_admin"})
 	public ResponseEntity<AccommodationType> update(@RequestBody AccommodationType accTypeNew) {
 		if(accommodationTypeRepo.existsById(accTypeNew.getId())) {
 			AccommodationType updated = accommodationTypeRepo.save(accTypeNew);
@@ -58,14 +59,14 @@ public class AccomodationTypeController {
 	@PostMapping(value="/insert",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@Secured(value="admin")
+	@Secured({"ROLE_admin"})
 	public ResponseEntity<AccommodationType> insert(@RequestBody AccommodationType accTypeNew) {
 		return new ResponseEntity<AccommodationType>(accommodationTypeRepo.save(accTypeNew), HttpStatus.OK);
 	}
 	
 	@DeleteMapping(value="/delete",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@Secured(value="admin")
+	@Secured({"ROLE_admin"})
 	public ResponseEntity<AccommodationType> delete(@RequestParam("id") Long id) {
 		Optional<AccommodationType> accType = accommodationTypeRepo.findById(id);
 		if(accType.isPresent()) {

@@ -30,6 +30,7 @@ public class AdditionalServicesController {
 	AdditionalServiceRepo repo;
 	
 	@RequestMapping(value="/all", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@Secured({"ROLE_ANONYMOUS", "ROLE_agent", "ROLE_admin", "ROLE_registered"})
 	public Page<AdditionalService> getAll(@NotNull final Pageable p) {
 		return repo.findAll(p);
 	}
@@ -37,7 +38,7 @@ public class AdditionalServicesController {
 	@PutMapping(value="/update",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@Secured(value="admin")
+	@Secured({"ROLE_admin"})
 	public ResponseEntity<AdditionalService> update(@RequestBody AdditionalService newEntity) {
 		if(repo.existsById(newEntity.getId())) {
 			return new ResponseEntity<AdditionalService>(repo.save(newEntity), HttpStatus.OK);
@@ -48,14 +49,14 @@ public class AdditionalServicesController {
 	@PostMapping(value="/insert",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@Secured(value="admin")
+	@Secured({"ROLE_admin"})
 	public ResponseEntity<AdditionalService> insert(@RequestBody AdditionalService newEntity) {
 		return new ResponseEntity<AdditionalService>(repo.save(newEntity), HttpStatus.OK);
 	}
 	
 	@DeleteMapping(value="/delete",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@Secured(value="admin")
+	@Secured({"ROLE_admin"})
 	public ResponseEntity<AdditionalService> delete(@RequestParam("id") Long id) {
 		Optional<AdditionalService> entity = repo.findById(id);
 		if(entity.isPresent()) {

@@ -19,6 +19,7 @@ import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -69,12 +70,14 @@ public class AccommodationController {
 	*/
 	@RequestMapping(method = RequestMethod.GET, value = "all")
 	@ResponseBody
+	@Secured({"ROLE_ANONYMOUS", "ROLE_agent", "ROLE_admin", "ROLE_registered"})
 	public ResponseEntity<?> searchDSL(@QuerydslPredicate(root=Accommodation.class) Predicate predicate,  Pageable page) {
         return new ResponseEntity<Page<AccommodationView>>(repo.findAll(predicate, page).map(a -> mapper.map(a, AccommodationView.class)), HttpStatus.OK);
 	}
 	
 	
 	@GetMapping(produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@Secured({"ROLE_ANONYMOUS", "ROLE_agent", "ROLE_admin", "ROLE_registered"})
 	public ResponseEntity<?> getOne(@RequestParam(value="id", required=true) Long id) {
 		Optional<Accommodation> accomodation = repo.findById(id);
 		if(accomodation.isPresent()) {

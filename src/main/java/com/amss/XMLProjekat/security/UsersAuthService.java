@@ -33,9 +33,8 @@ public class UsersAuthService implements UserDetailsService {
 		if(!user.isPresent())
 			throw new UsernameNotFoundException("Username not found.");
 		
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
 		List<SimpleGrantedAuthority> roleAuths = new ArrayList<>();
-		roleAuths.add(new SimpleGrantedAuthority(user.get().getUserType()));
+		roleAuths.add(new SimpleGrantedAuthority("ROLE_" + user.get().getUserType()));
 		UserDetails userDetails = new UserDetailsCustom(user.get().getUsername(), user.get().getPassword(), roleAuths);
 		return userDetails;
 	}

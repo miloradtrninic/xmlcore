@@ -43,6 +43,7 @@ public class AgentController {
 	private BCryptPasswordEncoder passwordEncoder;
 	
 	@RequestMapping(value="/all", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@Secured({"ROLE_ANONYMOUS", "ROLE_agent", "ROLE_admin", "ROLE_registered"})
 	public Page<AgentView> getAll(@NotNull final Pageable p) {
 		return agentRepo.findAll(p).map(u -> mapper.map(u, AgentView.class));
 	}
@@ -50,7 +51,7 @@ public class AgentController {
 	@PostMapping(value="/insert",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@Secured(value="admin")
+	@Secured({"ROLE_admin"})
 	public ResponseEntity<AgentView> insert(@RequestBody AgentCreation newEntity) {
 		Agent newAgent = mapper.map(newEntity, Agent.class);
 		newAgent.setPassword(passwordEncoder.encode(newEntity.getPassword()));
@@ -62,7 +63,7 @@ public class AgentController {
 	@PutMapping(value="/update",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@Secured(value="admin")
+	@Secured({"ROLE_admin"})
 	public ResponseEntity<?> update(@RequestBody AgentView newEntity) {
 		Optional<Agent> entity = agentRepo.findById(newEntity.getId());
 		if(entity.isPresent()) {
@@ -81,7 +82,7 @@ public class AgentController {
 	
 	@DeleteMapping(value="/delete",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@Secured(value="admin")
+	@Secured({"ROLE_admin"})
 	public ResponseEntity<?> delete(@RequestParam("id") Long id) {
 		Optional<Agent> entity = agentRepo.findById(id);
 		if(entity.isPresent()) {

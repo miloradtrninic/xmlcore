@@ -33,6 +33,7 @@ public class CategoryController {
 	ModelMapper mapper;
 	
 	@RequestMapping(value="/all", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@Secured({"ROLE_ANONYMOUS", "ROLE_agent", "ROLE_admin", "ROLE_registered"})
 	public Page<Category> getAll(@NotNull final Pageable p) {
 		return categoryRepo.findAll(p);
 	}
@@ -40,7 +41,7 @@ public class CategoryController {
 	@PutMapping(value="/update",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@Secured(value="admin")
+	@Secured({"ROLE_admin"})
 	public ResponseEntity<?> update(@RequestBody Category newCat) {
 		if(categoryRepo.existsById(newCat.getId())) {
 			Category updated = categoryRepo.save(newCat);
@@ -52,14 +53,14 @@ public class CategoryController {
 	@PostMapping(value="/insert",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@Secured(value="admin")
+	@Secured({"ROLE_admin"})
 	public ResponseEntity<Category> insert(@RequestBody Category newCat) {
 		return new ResponseEntity<Category>(categoryRepo.save(newCat), HttpStatus.OK);
 	}
 	
 	@DeleteMapping(value="/delete",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@Secured(value="admin")
+	@Secured({"ROLE_admin"})
 	public ResponseEntity<Category> delete(@RequestParam("id") Long id) {
 		Optional<Category> accType = categoryRepo.findById(id);
 		if(accType.isPresent()) {

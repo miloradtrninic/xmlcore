@@ -49,7 +49,7 @@ public class ReservationController {
 	ModelMapper mapper;
 	
 	@GetMapping(value="myreservations", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@Secured(value={"registered"})
+	@Secured({"ROLE_registered"})
 	public ResponseEntity<?> getMy(@NotNull Pageable p) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     	String username = authentication.getName();
@@ -62,7 +62,7 @@ public class ReservationController {
 	}
 	
 	@PostMapping(value="reserve", consumes=MediaType.APPLICATION_JSON_UTF8_VALUE, produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@Secured(value={"registered"})
+	@Secured({"ROLE_registered"})
 	public ResponseEntity<?> reserve(@RequestBody ReservationCreation reserve) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     	String username = authentication.getName();
@@ -86,7 +86,7 @@ public class ReservationController {
 	@DeleteMapping(value="/cancel",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@Secured(value={"registered"})
+	@Secured(value={"ROLE_registered"})
 	public ResponseEntity<?> delete(@RequestParam("id") Long id) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     	String username = authentication.getName();

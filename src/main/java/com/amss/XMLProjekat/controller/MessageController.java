@@ -45,7 +45,7 @@ public class MessageController {
 	ReservationRepo reservationRepo;
 	
 	@GetMapping(produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@Secured(value={"agent", "registered"})
+	@Secured({"ROLE_agent", "ROLE_registered"})
 	public ResponseEntity<?> get(@PathVariable("reservationId") Long reservationId){
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     	String username = authentication.getName();
@@ -56,7 +56,7 @@ public class MessageController {
 		return new ResponseEntity<>(mapper.map(messageRepo.findByReservationId(reservationId), MessageView.class), HttpStatus.OK);
 	}
 	@GetMapping(value="inbox", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@Secured(value={"agent", "registered"})
+	@Secured({"ROLE_agent", "ROLE_registered"})
 	public ResponseEntity<?> getInbox(){
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     	String username = authentication.getName();
@@ -67,7 +67,7 @@ public class MessageController {
 		return new ResponseEntity<>(mapper.map(messageRepo.findByToUserId(user.get().getId()), MessageView.class), HttpStatus.OK);
 	}
 	@GetMapping(value="outbox", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@Secured(value={"agent", "registered"})
+	@Secured({"ROLE_agent", "ROLE_registered"})
 	public ResponseEntity<?> getOutbox(){
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     	String username = authentication.getName();
@@ -81,7 +81,7 @@ public class MessageController {
 	@PostMapping(value="/insert",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@Secured(value={"agent", "registered"})
+	@Secured({"ROLE_agent", "ROLE_registered"})
 	public ResponseEntity<?> insert(@RequestBody MessageCreation newEntity) {
 		Optional<Reservation> reservation = reservationRepo.findById(newEntity.getReservationId());
 		if(!reservation.isPresent()) {

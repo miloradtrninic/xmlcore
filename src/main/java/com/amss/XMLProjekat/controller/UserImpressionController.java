@@ -43,7 +43,7 @@ public class UserImpressionController {
 	ModelMapper mapper;
 	
 	@RequestMapping(value="/all", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@Secured(value={"admin"})
+	@Secured({"ROLE_admin"})
 	public Page<UserImpressionView> getAll(@NotNull final Pageable p) {
 		return repo.findAll(p).map(u -> mapper.map(u, UserImpressionView.class));
 	}
@@ -51,7 +51,7 @@ public class UserImpressionController {
 	@PutMapping(value="/update",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@Secured(value={"admin"})
+	@Secured({"ROLE_admin"})
 	public ResponseEntity<?> update(@RequestBody UserImpressionView newEntity) {
 		Optional<UserImpression> impression = repo.findById(newEntity.getId());
 		if(impression.isPresent()) {
@@ -64,7 +64,7 @@ public class UserImpressionController {
 	@PostMapping(value="/insert",
 			produces=MediaType.APPLICATION_JSON_UTF8_VALUE,
 			consumes=MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@Secured(value={"registered"})
+	@Secured({"ROLE_registered"})
 	public ResponseEntity<?> insert(@RequestBody UserImpressionCreation newEntity) {
 		Optional<Accommodation> accommodation = accomodationRepo.findById(newEntity.getAccommodationId());
 		if(!accommodation.isPresent()) {
