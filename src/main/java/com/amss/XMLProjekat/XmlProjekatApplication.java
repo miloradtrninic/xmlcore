@@ -6,15 +6,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-
 import com.amss.XMLProjekat.repository.dsl.QDSLAliasRegistry;
 import com.amss.XMLProjekat.repository.dsl.QDSLPageableResolver;
 
@@ -23,6 +19,7 @@ import com.amss.XMLProjekat.repository.dsl.QDSLPageableResolver;
 @EnableTransactionManagement
 public class XmlProjekatApplication implements WebMvcConfigurer {
 
+	
 	public static void main(String[] args) {
 		SpringApplication.run(XmlProjekatApplication.class, args);
 	}

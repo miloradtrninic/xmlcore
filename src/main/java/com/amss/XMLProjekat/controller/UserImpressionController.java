@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -19,11 +20,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
+import com.amss.XMLProjekat.XmlProjekatApplication;
 import com.amss.XMLProjekat.beans.Accommodation;
 import com.amss.XMLProjekat.beans.RegisteredUser;
 import com.amss.XMLProjekat.beans.UserImpression;
-import com.amss.XMLProjekat.dto.AgentView;
+import com.amss.XMLProjekat.client.UserImpressionCreationRequest;
+import com.amss.XMLProjekat.client.UserImpressionResponse;
 import com.amss.XMLProjekat.dto.UserImpressionCreation;
 import com.amss.XMLProjekat.dto.UserImpressionView;
 import com.amss.XMLProjekat.repository.AccomodationRepo;
@@ -42,6 +46,9 @@ public class UserImpressionController {
 	@Autowired
 	ModelMapper mapper;
 	
+	@Value("${rating-service.url}")
+	public String ratingUrl;
+	
 	@RequestMapping(value="/all", produces=MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@Secured({"ROLE_admin"})
 	public Page<UserImpressionView> getAll(@NotNull final Pageable p) {
@@ -54,9 +61,24 @@ public class UserImpressionController {
 	@Secured({"ROLE_admin"})
 	public ResponseEntity<?> update(@RequestBody UserImpressionView newEntity) {
 		Optional<UserImpression> impression = repo.findById(newEntity.getId());
+		
 		if(impression.isPresent()) {
 			impression.get().setVerified(newEntity.isVerified());
-			return new ResponseEntity<UserImpressionView>(mapper.map(repo.save(impression.get()), UserImpressionView.class), HttpStatus.OK);
+			RestTemplate client = new RestTemplate();
+			ResponseEntity<UserImpressionResponse> response = client.postForEntity(ratingUrl + "impression/new",
+																					mapper.map(impression.get(), UserImpressionCreationRequest.class),
+																					UserImpressionResponse.class);
+			if(!response.getStatusCode().equals(HttpStatus.OK)) {
+				return response;
+			}
+			Optional<Accommodation> accommodation = accomodationRepo.findById(response.getBody().getAccommodationExternalKey());
+			if(accommodation.isPresent()) {
+				accommodation.get().setRating(response.getBody().getAverageRating());
+				accomodationRepo.save(accommodation.get());
+				return new ResponseEntity<UserImpressionView>(mapper.map(repo.save(impression.get()), UserImpressionView.class), HttpStatus.OK);
+			} else {
+				return ResponseEntity.badRequest().build();
+			}
 		}
 		return new ResponseEntity<UserImpressionView>(HttpStatus.BAD_REQUEST);
 	}

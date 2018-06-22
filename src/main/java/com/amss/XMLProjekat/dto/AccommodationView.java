@@ -2,8 +2,6 @@ package com.amss.XMLProjekat.dto;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,6 +19,7 @@ public class AccommodationView {
 	private List<PricePlanView> pricePlan;
 	private String agentUsername;
 	private List<RestrictionView> restrictions;
+	private List<ReservationView> reservations;
 	private String categoryName;
 	private List<UserImpressionView> userImpressions;
 	private Double rating;

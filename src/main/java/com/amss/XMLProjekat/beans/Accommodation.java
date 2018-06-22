@@ -52,6 +52,10 @@ public class Accommodation {
 	@OneToMany(orphanRemoval=true, mappedBy="accommodation", fetch=FetchType.EAGER)
 	@Cascade(CascadeType.ALL)
 	private Set<Restriction> restrictions;
+	
+	@OneToMany(orphanRemoval=true, mappedBy="accommodation", fetch=FetchType.EAGER)
+	@Cascade(CascadeType.ALL)
+	private Set<Reservation> reservations;
 
 	@ManyToOne(fetch=FetchType.EAGER, optional=false)
 	private Category category;
@@ -59,6 +63,6 @@ public class Accommodation {
 	@OneToMany(mappedBy="accommodation", fetch=FetchType.EAGER)
 	private Set<UserImpression> userImpressions;
 	
-	private Double rating;
+	private double rating;
 
 }

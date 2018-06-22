@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.amss.XMLProjekat.beans.RegisteredUser;
 import com.amss.XMLProjekat.dto.RegisteredUserView;
-import com.amss.XMLProjekat.dto.UserView;
 import com.amss.XMLProjekat.repository.RegisteredUserRepo;
 
 @RestController
