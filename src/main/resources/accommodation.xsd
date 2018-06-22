@@ -74,7 +74,13 @@
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
-
+	<xs:element name="getAccommodationsRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="username" type="xs:string" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
 	<!-- RESPONSES -->
 	<xs:element name="getReservationsResponse">
 		<xs:complexType>
@@ -142,6 +148,38 @@
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
+	<xs:element name="getCategoryResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="categories" type="tns:categoryView"
+					minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="getServicesResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="services" type="tns:additionalServiceView"
+					minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="getAccommodationTypeResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="types" type="tns:accommodationTypeView"
+					minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="getAccommodationsResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="accommodations" type="tns:accommodationView"
+					minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
 	<!-- MODELS -->
 	<xs:complexType name="reservationView">
 		<xs:sequence>
@@ -184,6 +222,24 @@
 				maxOccurs="unbounded" />
 			<xs:element name="pricePlans" type="tns:pricePlanView"
 				maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="accommodationTypeView">
+		<xs:sequence>
+			<xs:element name="id" type="xs:long" />
+			<xs:element name="name" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="categoryView">
+		<xs:sequence>
+			<xs:element name="id" type="xs:long"/>
+			<xs:element name="name" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="additionalServiceView">
+		<xs:sequence>
+			<xs:element name="id" type="xs:long" />
+			<xs:element name="serviceName" type="xs:string" />
 		</xs:sequence>
 	</xs:complexType>
 </xs:schema>

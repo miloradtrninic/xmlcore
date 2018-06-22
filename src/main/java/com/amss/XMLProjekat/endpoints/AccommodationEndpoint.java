@@ -13,14 +13,20 @@ import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
 import com.amss.XMLProjekat.beans.Accommodation;
+import com.amss.XMLProjekat.beans.AccommodationType;
+import com.amss.XMLProjekat.beans.AdditionalService;
 import com.amss.XMLProjekat.beans.Agent;
+import com.amss.XMLProjekat.beans.Category;
 import com.amss.XMLProjekat.beans.Message;
 import com.amss.XMLProjekat.beans.Reservation;
 import com.amss.XMLProjekat.beans.Restriction;
 import com.amss.XMLProjekat.beans.User;
 import com.amss.XMLProjekat.dto.soap.*;
+import com.amss.XMLProjekat.repository.AccommodationTypeRepo;
 import com.amss.XMLProjekat.repository.AccomodationRepo;
+import com.amss.XMLProjekat.repository.AdditionalServiceRepo;
 import com.amss.XMLProjekat.repository.AgentRepo;
+import com.amss.XMLProjekat.repository.CategoryRepo;
 import com.amss.XMLProjekat.repository.MessageRepo;
 import com.amss.XMLProjekat.repository.ReservationRepo;
 import com.amss.XMLProjekat.repository.RestrictionRepo;
@@ -34,6 +40,9 @@ public class AccommodationEndpoint {
 	AccomodationRepo accomodationRepo;
 	
 	@Autowired
+	AccommodationTypeRepo accomodationTypeRepo;
+	
+	@Autowired
 	ModelMapper mapper;
 	
 	@Autowired
@@ -41,6 +50,12 @@ public class AccommodationEndpoint {
 	
 	@Autowired
 	UserRepo userRepo;
+	
+	@Autowired
+	AdditionalServiceRepo additionalServiceRepo;
+	
+	@Autowired
+	CategoryRepo categoryRepo;
 	
 	@Autowired
 	RestrictionRepo restrictionRepo;
@@ -154,6 +169,38 @@ public class AccommodationEndpoint {
 			message.setReservation(reservation.get());
 			response.setSuccess(true);
 		}
+		return response;
+	}
+	@PayloadRoot(namespace = NAMESPACE, localPart = "getAccommodationType")
+	@ResponsePayload
+	public GetAccommodationTypeResponse getAccommodationType() {
+		GetAccommodationTypeResponse response = new GetAccommodationTypeResponse();
+		Iterable<AccommodationType> types = accomodationTypeRepo.findAll();
+		types.forEach(t -> response.getTypes().add(mapper.map(t, AccommodationTypeView.class)));
+		return response;
+	}
+	@PayloadRoot(namespace = NAMESPACE, localPart = "getCategory")
+	@ResponsePayload
+	public GetCategoryResponse getCategory() {
+		GetCategoryResponse response = new GetCategoryResponse();
+		Iterable<Category> categories = categoryRepo.findAll();
+		categories.forEach(t -> response.getCategories().add(mapper.map(t, CategoryView.class)));
+		return response;
+	}
+	@PayloadRoot(namespace = NAMESPACE, localPart = "getServices")
+	@ResponsePayload
+	public GetServicesResponse getServices() {
+		GetServicesResponse response = new GetServicesResponse();
+		Iterable<AdditionalService> services = additionalServiceRepo.findAll();
+		services.forEach(t -> response.getServices().add(mapper.map(t, AdditionalServiceView.class)));
+		return response;
+	}
+	@PayloadRoot(namespace = NAMESPACE, localPart = "getAccommodations")
+	@ResponsePayload
+	public GetAccommodationsResponse getAccommodations(@RequestPayload GetAccommodationsRequest request) {
+		GetAccommodationsResponse response = new GetAccommodationsResponse();
+		Iterable<Accommodation> accs = accomodationRepo.findByAgentUsernameEquals(request.getUsername());
+		accs.forEach(t -> response.getAccommodations().add(mapper.map(t, AccommodationView.class)));
 		return response;
 	}
 	

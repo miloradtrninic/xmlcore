@@ -46,6 +46,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link GetCategoryResponse }
+     * 
+     */
+    public GetCategoryResponse createGetCategoryResponse() {
+        return new GetCategoryResponse();
+    }
+
+    /**
+     * Create an instance of {@link CategoryView }
+     * 
+     */
+    public CategoryView createCategoryView() {
+        return new CategoryView();
+    }
+
+    /**
      * Create an instance of {@link RestrictionResponse }
      * 
      */
@@ -59,6 +75,30 @@ public class ObjectFactory {
      */
     public AccommodationView createAccommodationView() {
         return new AccommodationView();
+    }
+
+    /**
+     * Create an instance of {@link GetAccommodationsRequest }
+     * 
+     */
+    public GetAccommodationsRequest createGetAccommodationsRequest() {
+        return new GetAccommodationsRequest();
+    }
+
+    /**
+     * Create an instance of {@link GetAccommodationTypeResponse }
+     * 
+     */
+    public GetAccommodationTypeResponse createGetAccommodationTypeResponse() {
+        return new GetAccommodationTypeResponse();
+    }
+
+    /**
+     * Create an instance of {@link AccommodationTypeView }
+     * 
+     */
+    public AccommodationTypeView createAccommodationTypeView() {
+        return new AccommodationTypeView();
     }
 
     /**
@@ -126,6 +166,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link GetAccommodationsResponse }
+     * 
+     */
+    public GetAccommodationsResponse createGetAccommodationsResponse() {
+        return new GetAccommodationsResponse();
+    }
+
+    /**
      * Create an instance of {@link RestrictionRequest }
      * 
      */
@@ -155,6 +203,22 @@ public class ObjectFactory {
      */
     public GetReservationsResponse createGetReservationsResponse() {
         return new GetReservationsResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetServicesResponse }
+     * 
+     */
+    public GetServicesResponse createGetServicesResponse() {
+        return new GetServicesResponse();
+    }
+
+    /**
+     * Create an instance of {@link AdditionalServiceView }
+     * 
+     */
+    public AdditionalServiceView createAdditionalServiceView() {
+        return new AdditionalServiceView();
     }
 
     /**
