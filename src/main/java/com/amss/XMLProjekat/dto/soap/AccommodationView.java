@@ -25,8 +25,8 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="capacity" type="{http://www.w3.org/2001/XMLSchema}int"/>
  *         &lt;element name="agentId" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *         &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}long"/>
- *         &lt;element name="categoryName" type="{http://www.w3.org/2001/XMLSchema}long"/>
+ *         &lt;element name="typeName" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="categoryName" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="additionalServicesName" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded"/>
  *         &lt;element name="pricePlans" type="{http://amss.com/XMLProjekat/dto/soap}pricePlanView" maxOccurs="unbounded"/>
  *       &lt;/sequence>
@@ -45,7 +45,7 @@ import javax.xml.bind.annotation.XmlType;
     "name",
     "capacity",
     "agentId",
-    "type",
+    "typeName",
     "categoryName",
     "additionalServicesName",
     "pricePlans"
@@ -61,8 +61,10 @@ public class AccommodationView {
     protected String name;
     protected int capacity;
     protected long agentId;
-    protected long type;
-    protected long categoryName;
+    @XmlElement(required = true)
+    protected String typeName;
+    @XmlElement(required = true)
+    protected String categoryName;
     @XmlElement(required = true)
     protected List<String> additionalServicesName;
     @XmlElement(required = true)
@@ -189,34 +191,50 @@ public class AccommodationView {
     }
 
     /**
-     * Gets the value of the type property.
+     * Gets the value of the typeName property.
      * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
-    public long getType() {
-        return type;
+    public String getTypeName() {
+        return typeName;
     }
 
     /**
-     * Sets the value of the type property.
+     * Sets the value of the typeName property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
-    public void setType(long value) {
-        this.type = value;
+    public void setTypeName(String value) {
+        this.typeName = value;
     }
 
     /**
      * Gets the value of the categoryName property.
      * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
-    public long getCategoryName() {
+    public String getCategoryName() {
         return categoryName;
     }
 
     /**
      * Sets the value of the categoryName property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
-    public void setCategoryName(long value) {
+    public void setCategoryName(String value) {
         this.categoryName = value;
     }
 

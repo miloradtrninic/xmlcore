@@ -235,8 +235,8 @@
 			<xs:element name="name" type="xs:string" />
 			<xs:element name="capacity" type="xs:int" />
 			<xs:element name="agentId" type="xs:long" />
-			<xs:element name="type" type="xs:long" />
-			<xs:element name="categoryName" type="xs:long" />
+			<xs:element name="typeName" type="xs:string" />
+			<xs:element name="categoryName" type="xs:string" />
 			<xs:element name="additionalServicesName" type="xs:string"
 				maxOccurs="unbounded" />
 			<xs:element name="pricePlans" type="tns:pricePlanView"
