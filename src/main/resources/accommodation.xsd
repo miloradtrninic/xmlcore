@@ -57,6 +57,25 @@
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
+	<xs:element name="getCategoryRequest">
+		<xs:complexType>
+			<xs:sequence>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="getAccommodationTypeRequest">
+		<xs:complexType>
+			<xs:sequence>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="getServicesRequest">
+		<xs:complexType>
+			<xs:sequence>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
 	<xs:element name="createAccommodationRequest">
 		<xs:complexType>
 			<xs:sequence>

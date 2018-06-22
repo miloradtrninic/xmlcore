@@ -110,6 +110,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link GetServicesRequest }
+     * 
+     */
+    public GetServicesRequest createGetServicesRequest() {
+        return new GetServicesRequest();
+    }
+
+    /**
      * Create an instance of {@link GetInboxRequest }
      * 
      */
@@ -163,6 +171,14 @@ public class ObjectFactory {
      */
     public AcceptReservationRequest createAcceptReservationRequest() {
         return new AcceptReservationRequest();
+    }
+
+    /**
+     * Create an instance of {@link GetAccommodationTypeRequest }
+     * 
+     */
+    public GetAccommodationTypeRequest createGetAccommodationTypeRequest() {
+        return new GetAccommodationTypeRequest();
     }
 
     /**
@@ -243,6 +259,14 @@ public class ObjectFactory {
      */
     public CreateAccommodationResponse createCreateAccommodationResponse() {
         return new CreateAccommodationResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetCategoryRequest }
+     * 
+     */
+    public GetCategoryRequest createGetCategoryRequest() {
+        return new GetCategoryRequest();
     }
 
     /**
