@@ -173,7 +173,7 @@ public class AccommodationEndpoint {
 	}
 	@PayloadRoot(namespace = NAMESPACE, localPart = "getAccommodationTypeRequest")
 	@ResponsePayload
-	public GetAccommodationTypeResponse getAccommodationType(GetAccommodationTypeRequest request) {
+	public GetAccommodationTypeResponse getAccommodationType(@RequestPayload GetAccommodationTypeRequest request) {
 		GetAccommodationTypeResponse response = new GetAccommodationTypeResponse();
 		Iterable<AccommodationType> types = accomodationTypeRepo.findAll();
 		types.forEach(t -> response.getTypes().add(mapper.map(t, AccommodationTypeView.class)));
@@ -181,7 +181,7 @@ public class AccommodationEndpoint {
 	}
 	@PayloadRoot(namespace = NAMESPACE, localPart = "getCategoryRequest")
 	@ResponsePayload
-	public GetCategoryResponse getCategory(GetCategoryRequest request) {
+	public GetCategoryResponse getCategory(@RequestPayload GetCategoryRequest request) {
 		GetCategoryResponse response = new GetCategoryResponse();
 		Iterable<Category> categories = categoryRepo.findAll();
 		categories.forEach(t -> response.getCategories().add(mapper.map(t, CategoryView.class)));
@@ -189,7 +189,7 @@ public class AccommodationEndpoint {
 	}
 	@PayloadRoot(namespace = NAMESPACE, localPart = "getServicesRequest")
 	@ResponsePayload
-	public GetServicesResponse getServices(GetServicesRequest request) {
+	public GetServicesResponse getServices(@RequestPayload GetServicesRequest request) {
 		GetServicesResponse response = new GetServicesResponse();
 		Iterable<AdditionalService> services = additionalServiceRepo.findAll();
 		services.forEach(t -> response.getServices().add(mapper.map(t, AdditionalServiceView.class)));
