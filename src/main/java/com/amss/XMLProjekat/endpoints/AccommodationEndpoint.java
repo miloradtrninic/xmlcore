@@ -115,7 +115,6 @@ public class AccommodationEndpoint {
 		if(agent.isPresent() && category.isPresent() && type.isPresent()) {
 			accommodation.setCapacity(create.getCapacity());
 			accommodation.setDescription(create.getDescription());
-			accommodation.setId(create.getId());
 			accommodation.setLocation(create.getLocation());
 			accommodation.setName(create.getName());
 			accommodation.setRating(0);
@@ -127,7 +126,6 @@ public class AccommodationEndpoint {
 			servicesIterable.forEach(s -> services.add(s));
 			create.getPricePlans().forEach(p -> {
 				PricePlan plan = new PricePlan();
-				plan.setId(p.getId());
 				plan.setEndingDate(p.getEndingDate().toGregorianCalendar().getTime());
 				plan.setStartingDate(p.getStartingDate().toGregorianCalendar().getTime());
 				plan.setPrice(p.getPrice());
