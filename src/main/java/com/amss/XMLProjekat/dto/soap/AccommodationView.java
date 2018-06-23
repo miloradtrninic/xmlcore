@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="capacity" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="agentId" type="{http://www.w3.org/2001/XMLSchema}long"/>
+ *         &lt;element name="agentUsername" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="typeName" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="categoryName" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="additionalServicesName" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded"/>
@@ -44,7 +44,7 @@ import javax.xml.bind.annotation.XmlType;
     "description",
     "name",
     "capacity",
-    "agentId",
+    "agentUsername",
     "typeName",
     "categoryName",
     "additionalServicesName",
@@ -60,7 +60,8 @@ public class AccommodationView {
     @XmlElement(required = true)
     protected String name;
     protected int capacity;
-    protected long agentId;
+    @XmlElement(required = true)
+    protected String agentUsername;
     @XmlElement(required = true)
     protected String typeName;
     @XmlElement(required = true)
@@ -175,19 +176,27 @@ public class AccommodationView {
     }
 
     /**
-     * Gets the value of the agentId property.
+     * Gets the value of the agentUsername property.
      * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
-    public long getAgentId() {
-        return agentId;
+    public String getAgentUsername() {
+        return agentUsername;
     }
 
     /**
-     * Sets the value of the agentId property.
+     * Sets the value of the agentUsername property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
-    public void setAgentId(long value) {
-        this.agentId = value;
+    public void setAgentUsername(String value) {
+        this.agentUsername = value;
     }
 
     /**

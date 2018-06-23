@@ -3,6 +3,7 @@ package com.amss.XMLProjekat.dto.soap;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -17,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="agentId" type="{http://www.w3.org/2001/XMLSchema}long"/>
+ *         &lt;element name="agentUsername" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -28,27 +29,36 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "agentId"
+    "agentUsername"
 })
 @XmlRootElement(name = "getSentboxRequest")
 public class GetSentboxRequest {
 
-    protected long agentId;
+    @XmlElement(required = true)
+    protected String agentUsername;
 
     /**
-     * Gets the value of the agentId property.
+     * Gets the value of the agentUsername property.
      * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
-    public long getAgentId() {
-        return agentId;
+    public String getAgentUsername() {
+        return agentUsername;
     }
 
     /**
-     * Sets the value of the agentId property.
+     * Sets the value of the agentUsername property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
-    public void setAgentId(long value) {
-        this.agentId = value;
+    public void setAgentUsername(String value) {
+        this.agentUsername = value;
     }
 
 }

@@ -20,11 +20,12 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
+ *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}long"/>
  *         &lt;element name="location" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="capacity" type="{http://www.w3.org/2001/XMLSchema}int"/>
- *         &lt;element name="agentId" type="{http://www.w3.org/2001/XMLSchema}long"/>
+ *         &lt;element name="agentUsername" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}long"/>
  *         &lt;element name="category" type="{http://www.w3.org/2001/XMLSchema}long"/>
  *         &lt;element name="additionalServices" type="{http://www.w3.org/2001/XMLSchema}long" maxOccurs="unbounded"/>
@@ -39,11 +40,12 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
+    "id",
     "location",
     "description",
     "name",
     "capacity",
-    "agentId",
+    "agentUsername",
     "type",
     "category",
     "additionalServices",
@@ -52,6 +54,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "createAccommodationRequest")
 public class CreateAccommodationRequest {
 
+    protected long id;
     @XmlElement(required = true)
     protected String location;
     @XmlElement(required = true)
@@ -59,13 +62,30 @@ public class CreateAccommodationRequest {
     @XmlElement(required = true)
     protected String name;
     protected int capacity;
-    protected long agentId;
+    @XmlElement(required = true)
+    protected String agentUsername;
     protected long type;
     protected long category;
     @XmlElement(type = Long.class)
     protected List<Long> additionalServices;
     @XmlElement(required = true)
     protected List<PricePlanView> pricePlans;
+
+    /**
+     * Gets the value of the id property.
+     * 
+     */
+    public long getId() {
+        return id;
+    }
+
+    /**
+     * Sets the value of the id property.
+     * 
+     */
+    public void setId(long value) {
+        this.id = value;
+    }
 
     /**
      * Gets the value of the location property.
@@ -156,19 +176,27 @@ public class CreateAccommodationRequest {
     }
 
     /**
-     * Gets the value of the agentId property.
+     * Gets the value of the agentUsername property.
      * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
-    public long getAgentId() {
-        return agentId;
+    public String getAgentUsername() {
+        return agentUsername;
     }
 
     /**
-     * Sets the value of the agentId property.
+     * Sets the value of the agentUsername property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
-    public void setAgentId(long value) {
-        this.agentId = value;
+    public void setAgentUsername(String value) {
+        this.agentUsername = value;
     }
 
     /**

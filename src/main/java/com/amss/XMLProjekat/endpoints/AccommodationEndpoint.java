@@ -1,8 +1,9 @@
 package com.amss.XMLProjekat.endpoints;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -18,10 +19,40 @@ import com.amss.XMLProjekat.beans.AdditionalService;
 import com.amss.XMLProjekat.beans.Agent;
 import com.amss.XMLProjekat.beans.Category;
 import com.amss.XMLProjekat.beans.Message;
+import com.amss.XMLProjekat.beans.PricePlan;
 import com.amss.XMLProjekat.beans.Reservation;
 import com.amss.XMLProjekat.beans.Restriction;
 import com.amss.XMLProjekat.beans.User;
-import com.amss.XMLProjekat.dto.soap.*;
+import com.amss.XMLProjekat.dto.soap.AcceptReservationRequest;
+import com.amss.XMLProjekat.dto.soap.AcceptReservationResponse;
+import com.amss.XMLProjekat.dto.soap.AccommodationTypeView;
+import com.amss.XMLProjekat.dto.soap.AccommodationView;
+import com.amss.XMLProjekat.dto.soap.AdditionalServiceView;
+import com.amss.XMLProjekat.dto.soap.CategoryView;
+import com.amss.XMLProjekat.dto.soap.CreateAccommodationRequest;
+import com.amss.XMLProjekat.dto.soap.CreateAccommodationResponse;
+import com.amss.XMLProjekat.dto.soap.GetAccommodationTypeRequest;
+import com.amss.XMLProjekat.dto.soap.GetAccommodationTypeResponse;
+import com.amss.XMLProjekat.dto.soap.GetAccommodationsRequest;
+import com.amss.XMLProjekat.dto.soap.GetAccommodationsResponse;
+import com.amss.XMLProjekat.dto.soap.GetCategoryRequest;
+import com.amss.XMLProjekat.dto.soap.GetCategoryResponse;
+import com.amss.XMLProjekat.dto.soap.GetInboxRequest;
+import com.amss.XMLProjekat.dto.soap.GetInboxResponse;
+import com.amss.XMLProjekat.dto.soap.GetMessagesRequest;
+import com.amss.XMLProjekat.dto.soap.GetMessagesResponse;
+import com.amss.XMLProjekat.dto.soap.GetReservationsRequest;
+import com.amss.XMLProjekat.dto.soap.GetReservationsResponse;
+import com.amss.XMLProjekat.dto.soap.GetSentboxRequest;
+import com.amss.XMLProjekat.dto.soap.GetSentboxResponse;
+import com.amss.XMLProjekat.dto.soap.GetServicesRequest;
+import com.amss.XMLProjekat.dto.soap.GetServicesResponse;
+import com.amss.XMLProjekat.dto.soap.MessageView;
+import com.amss.XMLProjekat.dto.soap.ReservationView;
+import com.amss.XMLProjekat.dto.soap.RestrictionRequest;
+import com.amss.XMLProjekat.dto.soap.RestrictionResponse;
+import com.amss.XMLProjekat.dto.soap.SendMessageRequest;
+import com.amss.XMLProjekat.dto.soap.SendMessageResponse;
 import com.amss.XMLProjekat.repository.AccommodationTypeRepo;
 import com.amss.XMLProjekat.repository.AccomodationRepo;
 import com.amss.XMLProjekat.repository.AdditionalServiceRepo;
@@ -71,10 +102,35 @@ public class AccommodationEndpoint {
 	public CreateAccommodationResponse createAccommodation(@RequestPayload CreateAccommodationRequest create) {
 		CreateAccommodationResponse response = new CreateAccommodationResponse();
 		response.setSuccess(false);
-		Accommodation accommodation = mapper.map(create, Accommodation.class);
-		Optional<Agent> agent = agentRepo.findById(create.getAgentId());
-		if(agent.isPresent()) {
+		Accommodation accommodation = new Accommodation();
+		Iterable<AdditionalService> servicesIterable = additionalServiceRepo.findAllById(create.getAdditionalServices());
+		Optional<Category> category = categoryRepo.findById(create.getCategory());
+		Optional<Agent> agent = agentRepo.findOneByUsername(create.getAgentUsername());
+		Optional<AccommodationType> type = accomodationTypeRepo.findById(create.getType());
+		Set<PricePlan> prices = new HashSet<>();
+		if(agent.isPresent() && category.isPresent() && type.isPresent()) {
+			accommodation.setCapacity(create.getCapacity());
+			accommodation.setDescription(create.getDescription());
+			accommodation.setId(create.getId());
+			accommodation.setLocation(create.getLocation());
+			accommodation.setName(create.getName());
+			accommodation.setRating(0);
+			accommodation.setUserImpressions(new HashSet<>());
 			accommodation.setAgent(agent.get());
+			accommodation.setCategory(category.get());
+			accommodation.setType(type.get());
+			HashSet<AdditionalService> services = new HashSet<>();
+			servicesIterable.forEach(s -> services.add(s));
+			create.getPricePlans().forEach(p -> {
+				PricePlan plan = new PricePlan();
+				plan.setId(p.getId());
+				plan.setEndingDate(p.getEndingDate().toGregorianCalendar().getTime());
+				plan.setStartingDate(p.getStartingDate().toGregorianCalendar().getTime());
+				plan.setPrice(p.getPrice());
+				prices.add(plan);
+			});
+			accommodation.setAdditionalServices(new HashSet<>(services));
+			accommodation.setPricePlan(prices);
 			accommodation = accomodationRepo.save(accommodation);
 			response.setAccomodation(mapper.map(accommodation, AccommodationView.class));
 			response.setSuccess(true);
@@ -129,7 +185,8 @@ public class AccommodationEndpoint {
 	public  GetInboxResponse getInbox(@RequestPayload GetInboxRequest request) {
 		GetInboxResponse response = new GetInboxResponse();
 		ArrayList<MessageView> messages = new ArrayList<>();
-		messageRepo.findByToUserId(request.getAgentId()).forEach(m -> messages.add(mapper.map(m, MessageView.class)));
+		messageRepo.findByToUserUsername(request.getAgentUsername())
+				   .forEach(m -> messages.add(mapper.map(m, MessageView.class)));
 		response.getMessages().addAll(messages);
 		return response;
 	}
@@ -138,7 +195,8 @@ public class AccommodationEndpoint {
 	public GetSentboxResponse getSentbox(@RequestPayload GetSentboxRequest request) {
 		GetSentboxResponse response = new GetSentboxResponse();
 		ArrayList<MessageView> messages = new ArrayList<>();
-		messageRepo.findByFromUserId(request.getAgentId()).forEach(m -> messages.add(mapper.map(m, MessageView.class)));
+		messageRepo.findByFromUserUsername(request.getAgentUsername())
+				   .forEach(m -> messages.add(mapper.map(m, MessageView.class)));
 		response.getMessages().addAll(messages);
 		return response;
 	}
@@ -148,7 +206,8 @@ public class AccommodationEndpoint {
 	public GetMessagesResponse getMessagesByReservation(@RequestPayload GetMessagesRequest request) {
 		GetMessagesResponse response = new GetMessagesResponse();
 		ArrayList<MessageView> messages = new ArrayList<>();
-		messageRepo.findByReservationId(request.getReservationId()).forEach(m -> messages.add(mapper.map(m, MessageView.class)));
+		messageRepo.findByReservationId(request.getReservationId())
+				   .forEach(m -> messages.add(mapper.map(m, MessageView.class)));
 		response.getMessages().addAll(messages);
 		return response;
 	}

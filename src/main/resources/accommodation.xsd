@@ -19,14 +19,14 @@
 	<xs:element name="getInboxRequest">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element name="agentId" type="xs:long" />
+				<xs:element name="agentUsername" type="xs:string" />
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="getSentboxRequest">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element name="agentId" type="xs:long" />
+				<xs:element name="agentUsername" type="xs:string" />
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -79,11 +79,12 @@
 	<xs:element name="createAccommodationRequest">
 		<xs:complexType>
 			<xs:sequence>
+				<xs:element name="id" type="xs:long" />
 				<xs:element name="location" type="xs:string" />
 				<xs:element name="description" type="xs:string" />
 				<xs:element name="name" type="xs:string" />
 				<xs:element name="capacity" type="xs:int" />
-				<xs:element name="agentId" type="xs:long" />
+				<xs:element name="agentUsername" type="xs:string" />
 				<xs:element name="type" type="xs:long" />
 				<xs:element name="category" type="xs:long" />
 				<xs:element name="additionalServices" type="xs:long"
@@ -234,7 +235,7 @@
 			<xs:element name="description" type="xs:string" />
 			<xs:element name="name" type="xs:string" />
 			<xs:element name="capacity" type="xs:int" />
-			<xs:element name="agentId" type="xs:long" />
+			<xs:element name="agentUsername" type="xs:string" />
 			<xs:element name="typeName" type="xs:string" />
 			<xs:element name="categoryName" type="xs:string" />
 			<xs:element name="additionalServicesName" type="xs:string"

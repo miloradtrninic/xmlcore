@@ -24,7 +24,6 @@ import lombok.experimental.Accessors;
 @Accessors
 public class Accommodation {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	private String location;
