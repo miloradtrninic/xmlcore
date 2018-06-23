@@ -234,6 +234,7 @@ public class AccommodationEndpoint {
 			message.setFromUser(fromUser.get());
 			message.setToUser(toUser.get());
 			message.setReservation(reservation.get());
+			messageRepo.save(message);
 			response.setSuccess(true);
 		}
 		return response;
