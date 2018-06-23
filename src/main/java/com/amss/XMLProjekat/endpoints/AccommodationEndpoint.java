@@ -59,6 +59,7 @@ import com.amss.XMLProjekat.repository.AdditionalServiceRepo;
 import com.amss.XMLProjekat.repository.AgentRepo;
 import com.amss.XMLProjekat.repository.CategoryRepo;
 import com.amss.XMLProjekat.repository.MessageRepo;
+import com.amss.XMLProjekat.repository.PricePlanRepo;
 import com.amss.XMLProjekat.repository.ReservationRepo;
 import com.amss.XMLProjekat.repository.RestrictionRepo;
 import com.amss.XMLProjekat.repository.UserRepo;
@@ -97,6 +98,9 @@ public class AccommodationEndpoint {
 	@Autowired
 	MessageRepo messageRepo;
 	
+	@Autowired
+	PricePlanRepo priceplanRepo;
+	
 	@PayloadRoot(namespace = NAMESPACE, localPart = "createAccommodationRequest")
 	@ResponsePayload
 	public CreateAccommodationResponse createAccommodation(@RequestPayload CreateAccommodationRequest create) {
@@ -130,8 +134,12 @@ public class AccommodationEndpoint {
 				prices.add(plan);
 			});
 			accommodation.setAdditionalServices(new HashSet<>(services));
-			accommodation.setPricePlan(prices);
 			accommodation = accomodationRepo.save(accommodation);
+			for(PricePlan price:prices) {
+				price.setAccommodation(accommodation);
+				priceplanRepo.save(price);
+			}
+			accommodation.setPricePlan(prices);
 			response.setAccomodation(mapper.map(accommodation, AccommodationView.class));
 			response.setSuccess(true);
 		}
