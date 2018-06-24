@@ -46,6 +46,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link DocumentView }
+     * 
+     */
+    public DocumentView createDocumentView() {
+        return new DocumentView();
+    }
+
+    /**
      * Create an instance of {@link GetCategoryResponse }
      * 
      */

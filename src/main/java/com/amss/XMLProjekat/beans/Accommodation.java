@@ -34,7 +34,7 @@ public class Accommodation {
 	private String description;
 
 	private String name;
-	@OneToMany(orphanRemoval=true, fetch=FetchType.EAGER)
+	@OneToMany(orphanRemoval=true, fetch=FetchType.EAGER, mappedBy="accommodation")
 	@Cascade(CascadeType.ALL)
 	private Set<Document> images;
 

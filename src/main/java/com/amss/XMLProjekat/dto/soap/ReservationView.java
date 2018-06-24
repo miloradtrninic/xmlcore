@@ -27,7 +27,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="startingDate" type="{http://www.w3.org/2001/XMLSchema}date"/>
  *         &lt;element name="endingDate" type="{http://www.w3.org/2001/XMLSchema}date"/>
  *         &lt;element name="confirmed" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
- *         &lt;element name="messages" type="{http://www.w3.org/2001/XMLSchema}boolean" maxOccurs="unbounded"/>
+ *         &lt;element name="messages" type="{http://amss.com/XMLProjekat/dto/soap}messageView" maxOccurs="unbounded"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -60,8 +60,8 @@ public class ReservationView {
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar endingDate;
     protected boolean confirmed;
-    @XmlElement(type = Boolean.class)
-    protected List<Boolean> messages;
+    @XmlElement(required = true)
+    protected List<MessageView> messages;
 
     /**
      * Gets the value of the id property.
@@ -209,13 +209,13 @@ public class ReservationView {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Boolean }
+     * {@link MessageView }
      * 
      * 
      */
-    public List<Boolean> getMessages() {
+    public List<MessageView> getMessages() {
         if (messages == null) {
-            messages = new ArrayList<Boolean>();
+            messages = new ArrayList<MessageView>();
         }
         return this.messages;
     }

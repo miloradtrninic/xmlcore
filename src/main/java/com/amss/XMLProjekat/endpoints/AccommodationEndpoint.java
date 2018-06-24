@@ -18,6 +18,7 @@ import com.amss.XMLProjekat.beans.AccommodationType;
 import com.amss.XMLProjekat.beans.AdditionalService;
 import com.amss.XMLProjekat.beans.Agent;
 import com.amss.XMLProjekat.beans.Category;
+import com.amss.XMLProjekat.beans.Document;
 import com.amss.XMLProjekat.beans.Message;
 import com.amss.XMLProjekat.beans.PricePlan;
 import com.amss.XMLProjekat.beans.Reservation;
@@ -31,6 +32,7 @@ import com.amss.XMLProjekat.dto.soap.AdditionalServiceView;
 import com.amss.XMLProjekat.dto.soap.CategoryView;
 import com.amss.XMLProjekat.dto.soap.CreateAccommodationRequest;
 import com.amss.XMLProjekat.dto.soap.CreateAccommodationResponse;
+import com.amss.XMLProjekat.dto.soap.DocumentView;
 import com.amss.XMLProjekat.dto.soap.GetAccommodationTypeRequest;
 import com.amss.XMLProjekat.dto.soap.GetAccommodationTypeResponse;
 import com.amss.XMLProjekat.dto.soap.GetAccommodationsRequest;
@@ -58,6 +60,7 @@ import com.amss.XMLProjekat.repository.AccomodationRepo;
 import com.amss.XMLProjekat.repository.AdditionalServiceRepo;
 import com.amss.XMLProjekat.repository.AgentRepo;
 import com.amss.XMLProjekat.repository.CategoryRepo;
+import com.amss.XMLProjekat.repository.DocumentRepo;
 import com.amss.XMLProjekat.repository.MessageRepo;
 import com.amss.XMLProjekat.repository.PricePlanRepo;
 import com.amss.XMLProjekat.repository.ReservationRepo;
@@ -101,6 +104,9 @@ public class AccommodationEndpoint {
 	@Autowired
 	PricePlanRepo priceplanRepo;
 	
+	@Autowired
+	DocumentRepo documentRepo;
+	
 	@PayloadRoot(namespace = NAMESPACE, localPart = "createAccommodationRequest")
 	@ResponsePayload
 	public CreateAccommodationResponse createAccommodation(@RequestPayload CreateAccommodationRequest create) {
@@ -112,6 +118,7 @@ public class AccommodationEndpoint {
 		Optional<Agent> agent = agentRepo.findOneByUsername(create.getAgentUsername());
 		Optional<AccommodationType> type = accomodationTypeRepo.findById(create.getType());
 		Set<PricePlan> prices = new HashSet<>();
+		Set<Document> documents = new HashSet<>();
 		if(agent.isPresent() && category.isPresent() && type.isPresent()) {
 			accommodation.setCapacity(create.getCapacity());
 			accommodation.setDescription(create.getDescription());
@@ -137,6 +144,14 @@ public class AccommodationEndpoint {
 				price.setAccommodation(accommodation);
 				priceplanRepo.save(price);
 			}
+			for(DocumentView d:create.getImages()) {
+				Document document = new Document();
+				document.setPath(d.getPath());
+				document.setAccommodation(accommodation);
+				documents.add(document);
+				documentRepo.save(document);
+			}
+			accommodation.setImages(documents);
 			accommodation.setPricePlan(prices);
 			response.setAccomodation(mapper.map(accommodation, AccommodationView.class));
 			response.setSuccess(true);

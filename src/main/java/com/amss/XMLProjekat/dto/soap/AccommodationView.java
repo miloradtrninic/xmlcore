@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="typeName" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="categoryName" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="additionalServicesName" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded"/>
+ *         &lt;element name="documents" type="{http://amss.com/XMLProjekat/dto/soap}documentView" maxOccurs="unbounded"/>
  *         &lt;element name="pricePlans" type="{http://amss.com/XMLProjekat/dto/soap}pricePlanView" maxOccurs="unbounded"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -48,6 +49,7 @@ import javax.xml.bind.annotation.XmlType;
     "typeName",
     "categoryName",
     "additionalServicesName",
+    "documents",
     "pricePlans"
 })
 public class AccommodationView {
@@ -68,6 +70,8 @@ public class AccommodationView {
     protected String categoryName;
     @XmlElement(required = true)
     protected List<String> additionalServicesName;
+    @XmlElement(required = true)
+    protected List<DocumentView> documents;
     @XmlElement(required = true)
     protected List<PricePlanView> pricePlans;
 
@@ -274,6 +278,35 @@ public class AccommodationView {
             additionalServicesName = new ArrayList<String>();
         }
         return this.additionalServicesName;
+    }
+
+    /**
+     * Gets the value of the documents property.
+     * 
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the documents property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getDocuments().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link DocumentView }
+     * 
+     * 
+     */
+    public List<DocumentView> getDocuments() {
+        if (documents == null) {
+            documents = new ArrayList<DocumentView>();
+        }
+        return this.documents;
     }
 
     /**
