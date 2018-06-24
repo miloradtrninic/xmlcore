@@ -209,7 +209,7 @@
 			<xs:element name="startingDate" type="xs:date" />
 			<xs:element name="endingDate" type="xs:date" />
 			<xs:element name="confirmed" type="xs:boolean" />
-			<xs:element name="messages" type="xs:boolean" maxOccurs="unbounded" />
+			<xs:element name="messages" type="xs:messageView" maxOccurs="unbounded" />
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="messageView">
