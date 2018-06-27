@@ -43,8 +43,10 @@ public abstract class User {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date registrationDate;
 	private Boolean blocked;
+	private String passResetHash;
 	@Transient
 	private String userType;
+	
 	
 	public String getUserType() {
 		DiscriminatorValue val = this.getClass().getAnnotation( DiscriminatorValue.class );
